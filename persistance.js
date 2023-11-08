@@ -8,7 +8,7 @@ const sales = undefined;
 
 async function connectDatabase(){
     if (!client){
-        client = new mongodb.MongoClient('mongodb://127.0.0.1:27017');
+        client = new mongodb.MongoClient('mongodb+srv://WebTech856:Doha2023@project.tgm3esr.mongodb.net/');
         await client.connect();
         station = client.db('Station');
         users = client.db('Users');
@@ -42,36 +42,48 @@ async function getUser(id){
 
 async function getStation(id){
     await connectDatabase();
-    let station = await station.find({StationID: id});
+    let station = await station.findOne({StationID: id});
     if(!station){
         return false;
     }
-    return true;
+    return station;
 }
 
 async function updateStation(id, data){
     await connectDatabase();
-
+    await station.replaceOne({stationID:id}, data);
 }
 
 async function updateUser(id, data){
-
+    await connectDatabase();
+    await users.replaceOne({UserID:id}, data);
 }
 
 async function addSales(data){
-
+    await connectDatabase();
+    await users.insertOne(data);
 }
 
 async function startSession(key, data){
-
+    await connectDatabase();
+    const newSession = {
+        sessionKey: key,
+        Expiry: new Date() + 1000*60*5,
+        data: data,
+      };
+    await sessions.insertOne(newSession);
 }
 
 async function getSession(key){
-
+    let sd = await sessions.findOne({SessionKey:key}).data;
+    if(!sd){
+        return undefined;
+    }
+    return sd;
 }
 
 async function deleteSession(key){
-
+    await sessionsCollection.deleteOne({ sessionKey: key });
 }
 
 module.exports = {
