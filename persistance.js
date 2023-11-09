@@ -63,15 +63,24 @@ async function addSales(data){
     await connectDatabase();
     await users.insertOne(data);
 }
-
-async function startSession(key, data){
-    await connectDatabase();
-    const newSession = {
-        sessionKey: key,
-        Expiry: new Date() + 1000*60*5,
-        data: data,
-      };
-    await sessions.insertOne(newSession);
+// need fixing
+async function updateSession(uuid, expiry, data){
+    await connectDatabase()
+    let findSession = await sessions.findOne({"SessionKey": uuid})
+    if(!findSession){
+        await session.insertOne({
+            "sessionKey": uuid,
+            "expiry": expiry,
+            "data": data
+        })
+    }else{
+        await session.replaceOne({"SessionKey":uuid}, {
+            "sessionKey": uuid,
+            "expiry": expiry,
+            "data": data
+        })
+    }
+    return true;
 }
 
 async function getSession(key){
@@ -94,7 +103,7 @@ module.exports = {
     updateUser,
     updateStation,
     addSales,
-    startSession,
+    updateSession,
     getSession,
     deleteSession
 }

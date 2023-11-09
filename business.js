@@ -1,4 +1,5 @@
 const persistance = require('./persistance')
+const crypto = require('crypto')
 
 async function getAllUsers(){
     let allUsers = await persistance.getAllUsers()
@@ -24,8 +25,71 @@ async function getStation(id){
     return await persistance.getStation(id)
 }
 
-async function updateStation(id, data){
-    
+async function startSession(data){
+    let sessionUUID = crypto.randomUUID()
+    let expiry = new Date(Date.now() + 1000*60*10)
+    await persistance.updateSession(sessionUUID, expiry, data)
+    return sessionUUID
+}
+
+async function getSession(key){
+    return await persistance.getSession(key)
+}
+
+async function deleteSession(key){
+    return await persistance.deleteSession(key)
+}
+
+async function generateToken(key){
+    let token = crypto.randomUUID()
+    let sessionData = await persistence.getSession(key)
+    sessionData.csrf = token
+    await persistance.updateSession(key, new Date(Date.now() + 1000*60*10), sessionData)
+    return token
+}
+
+async function cancelToken(key){
+    let sessionData = await persistence.getSession(key)
+    delete sessionData.csrf
+    await persistance.updateSession(key, new Date(Date.now() + 1000*60*10), sessionData)
+}
+
+async function getToken(key){
+    let sessionData = await persistance.getSession(key)
+    return sessionData.csrf
+}
+
+async function setFlash(key, message){
+    let sessionData = await persistance.getSession(key)
+    sessionData.flash = message
+    await persistance.updateSession(key, new Date(Date.now()+ 1000*60*10), sessionData)
+}
+
+async function getFlash(key){
+    let sessionData = await persistance.getSession(key)
+    if(!sessionData){
+        return undefined
+    }else{
+        let result = sessionData.flash
+        delete sessionData.flash
+        await persistance.updateSession(key, new Date(Date.now()+ 1000*60*10), sessionData)
+        return result 
+    }
+}
+module.exports = {
+    getAllUsers,
+    getAllStations,
+    getUser,
+    getStation,
+    startSession,
+    getSession,
+    deleteSession,
+    generateToken,
+    getToken,
+    cancelToken,
+    setFlash,
+    getFlash
+
 }
 
 
