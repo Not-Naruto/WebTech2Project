@@ -9,11 +9,12 @@ sales = undefined;
 async function connectDatabase(){
     if (!client){
         client = new mongodb.MongoClient('mongodb+srv://webtech856:Doha2023@project.tgm3esr.mongodb.net/');
-        await client.connect();
-        station = client.db('Station');
-        users = client.db('Users');
-        sessions = client.db('Sessions');
-        sales = client.db('Sales');
+        await client.connect()
+        let db = client.db('Project')
+        station = db.collection('Stations');
+        users = db.collection('Users');
+        sessions = db.collection('Sessions');
+        sales = db.collection('Sales');
     }
 }
 
