@@ -46,7 +46,7 @@ async function getStation(id){
     if(!station){
         return false;
     }
-    return true;
+    return station;
 }
 
 async function updateStation(id, data){
