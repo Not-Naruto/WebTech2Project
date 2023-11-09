@@ -1,14 +1,14 @@
 const mongodb = require('mongodb')
 
-const client = undefined;
-const station = undefined;
-const users = undefined;
-const sessions = undefined;
-const sales = undefined;
+client = undefined;
+station = undefined;
+users = undefined;
+sessions = undefined;
+sales = undefined;
 
 async function connectDatabase(){
     if (!client){
-        client = new mongodb.MongoClient('mongodb+srv://WebTech856:Doha2023@project.tgm3esr.mongodb.net/');
+        client = new mongodb.MongoClient('mongodb+srv://webtech856:Doha2023@project.tgm3esr.mongodb.net/');
         await client.connect();
         station = client.db('Station');
         users = client.db('Users');
