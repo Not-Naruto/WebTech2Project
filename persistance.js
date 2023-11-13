@@ -32,9 +32,9 @@ async function getAllStations(){
     return result;
 }
 
-async function getUser(id){
+async function getUser(name){
     await connectDatabase();
-    let student = await users.findOne({ UserID: id});
+    let student = await users.findOne({ Name: name});
     if(!student){
         return false;
     }

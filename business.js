@@ -1,6 +1,21 @@
 const persistance = require('./persistance')
 const crypto = require('crypto')
 
+async function attemptLogin(user,pass){
+    let details = await persistence.getUser(user)
+    if (details == undefined || details.Password != pass) {
+        return undefined
+    }
+    let data = {
+        username: details.Name,
+        type: details.UserType
+    }
+
+    key = await startSession(data)
+    let sd = await persistance.getSession(key)
+    return sd
+}
+
 async function getAllUsers(){
     let allUsers = await persistance.getAllUsers()
     if(allUsers.length == 0){
@@ -88,7 +103,8 @@ module.exports = {
     getToken,
     cancelToken,
     setFlash,
-    getFlash
+    getFlash,
+    attemptLogin
 
 }
 
