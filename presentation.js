@@ -12,7 +12,7 @@ app.set('view engine', 'handlebars')
 app.engine('handlebars', handlebars.engine())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser())
-app.use(express.static('static'));
+app.use("/static",express.static(__dirname+'/static'));
 
 app.get("/", async (req,res)=>{
     let message = req.query.message
@@ -59,4 +59,4 @@ app.get("/Manager", async (req, res)=>{
 
 
 
-app.listen(8000, () => {})
+app.listen(8000, () => {console.log("App running at port 8000")})
