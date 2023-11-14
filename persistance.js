@@ -67,7 +67,7 @@ async function addSales(data){
 // need fixing
 async function updateSession(uuid, expiry, data){
     await connectDatabase()
-    let findSession = await session.findOne({"SessionKey": uuid})
+    let findSession = await session.findOne({"sessionKey": uuid})
     if(!findSession){
         await session.insertOne({
             "sessionKey": uuid,
@@ -75,7 +75,7 @@ async function updateSession(uuid, expiry, data){
             "data": data
         })
     }else{
-        await session.replaceOne({"SessionKey":uuid}, {
+        await session.replaceOne({"sessionKey":uuid}, {
             "sessionKey": uuid,
             "expiry": expiry,
             "data": data
@@ -85,15 +85,15 @@ async function updateSession(uuid, expiry, data){
 }
 
 async function getSession(key){
-    let sd = await session.findOne({"SessionKey":key});
+    let sd = await session.findOne({"sessionKey":key});
     if(!sd){
         return undefined;
     }
-    return sd;
+    return sd.data;
 }
 
 async function deleteSession(key){
-    await session.deleteOne({ sessionKey: key });
+    await session.deleteOne({ "sessionKey": key });
 }
 
 module.exports = {
