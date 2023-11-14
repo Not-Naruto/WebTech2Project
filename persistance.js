@@ -4,6 +4,7 @@ client = undefined;
 station = undefined;
 users = undefined;
 session = undefined;
+session = undefined;
 sales = undefined;
 
 async function connectDatabase(){
@@ -13,6 +14,7 @@ async function connectDatabase(){
         let db = client.db('Project')
         station = db.collection('Stations');
         users = db.collection('Users');
+        session = db.collection('Sessions');
         session = db.collection('Sessions');
         sales = db.collection('Sales');
     }
@@ -67,7 +69,7 @@ async function addSales(data){
 // need fixing
 async function updateSession(uuid, expiry, data){
     await connectDatabase()
-    let findSession = await session.findOne({"SessionKey": uuid})
+    let findSession = await session.findOne({"sessionKey": uuid})
     if(!findSession){
         await session.insertOne({
             "sessionKey": uuid,
@@ -75,7 +77,7 @@ async function updateSession(uuid, expiry, data){
             "data": data
         })
     }else{
-        await session.replaceOne({"SessionKey":uuid}, {
+        await session.replaceOne({"sessionKey":uuid}, {
             "sessionKey": uuid,
             "expiry": expiry,
             "data": data
@@ -85,15 +87,15 @@ async function updateSession(uuid, expiry, data){
 }
 
 async function getSession(key){
-    let sd = await session.findOne({SessionKey:key}).data;
+    let sd = await session.findOne({"sessionKey":key});
     if(!sd){
         return undefined;
     }
-    return sd;
+    return sd.data;
 }
 
 async function deleteSession(key){
-    await session.deleteOne({ sessionKey: key });
+    await session.deleteOne({ "sessionKey": key });
 }
 
 module.exports = {

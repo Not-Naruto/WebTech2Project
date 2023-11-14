@@ -37,15 +37,12 @@
 </head>
 
 {{#if message}}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong>Alert: </strong>{{message}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div class="alert alert-danger mx-5" role="alert">
+  Alert: {{message}}
 </div>
 {{/if}}
-<form method="post" class="container w-50 position-absolute top-50 start-50 translate-middle">
-    <div class="card m-5">
+<form method="post" class="container mx-auto w-75">
+    <div class="card m-5 shadow align-middle">
         <div class="card-body">
             <h1 class="display-4 text-center">Login Page</h1>
             <div class="form-group">
@@ -58,7 +55,7 @@
                 <input type="password" id="form2Example2" class="form-control" name="password" placeholder="Enter your password"/>
             </div>
             
-            <button type="button" class="btn btn-block btn-primary mb-4 my-3 mx-auto" style="display: block;">Sign in</button>
+            <button type="submit" class="btn btn-block btn-primary mb-4 my-3 mx-auto" style="display: block;">Sign in</button>
             
 
             <p class="text-center"><a href="#" class="text-muted">Login as Guest</a></p>

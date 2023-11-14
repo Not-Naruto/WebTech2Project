@@ -2,7 +2,7 @@ const persistance = require('./persistance')
 const crypto = require('crypto')
 
 async function attemptLogin(user,pass){
-    let details = await persistence.getUser(user)
+    let details = await persistance.getUser(user)
     if (details == undefined || details.Password != pass) {
         return undefined
     }

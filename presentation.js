@@ -32,6 +32,16 @@ app.post("/", async (req,res)=>{
         res.redirect('/?message=Invalid Credentials')
     }
 })
+app.get("/HomePage/:username", async(req,res)=>{
+    let userdetail =await business.getUser(req.params.username)
+    if(userdetail.UserType== "Manager"){
+        res.redirect("/Manager")
+    }else if (userdetail.UserType== "Admin"){
+        res.redirect("/Admin")
+    }else{
+        res.redirect("/Guest")
+    }
+})
 
 
 
