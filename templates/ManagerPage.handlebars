@@ -1,6 +1,14 @@
 <body>
-    <h3>{{station}}</h3>
+    <h3>Station Details</h3>
+    <h4>Name: {{station.Name}}</h4>
+    <h4>Location: {{station.Location}}</h4>
+    <h4>Manager: {{station.Manager}}</h4>
+    
     <h3>Current Fuel Prices</h3>
+    {{#each station.Fuel}}
+        <h4>Type: {{this.type}}, Price: {{this.price}}, Remaining: {{this.remaining}}</h4>
+    {{/each}}
+    
     <a href="#">Delivery</a>
     <a href="#">Sales</a>
 </body>
