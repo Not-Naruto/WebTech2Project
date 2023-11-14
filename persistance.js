@@ -4,6 +4,7 @@ client = undefined;
 station = undefined;
 users = undefined;
 session = undefined;
+session = undefined;
 sales = undefined;
 
 async function connectDatabase(){
@@ -13,6 +14,7 @@ async function connectDatabase(){
         let db = client.db('Project')
         station = db.collection('Stations');
         users = db.collection('Users');
+        session = db.collection('Sessions');
         session = db.collection('Sessions');
         sales = db.collection('Sales');
     }
