@@ -50,7 +50,6 @@ app.get("/Manager", async (req, res)=>{
     let stationData = await business.getStation(1001)
     console.log(stationData)
     res.render('ManagerPage',{
-        layout: undefined,
         station: stationData
     })
 })
