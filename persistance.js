@@ -3,7 +3,7 @@ const mongodb = require('mongodb')
 client = undefined;
 station = undefined;
 users = undefined;
-sessions = undefined;
+session = undefined;
 sales = undefined;
 
 async function connectDatabase(){
@@ -13,7 +13,7 @@ async function connectDatabase(){
         let db = client.db('Project')
         station = db.collection('Stations');
         users = db.collection('Users');
-        sessions = db.collection('Sessions');
+        session = db.collection('Sessions');
         sales = db.collection('Sales');
     }
 }
@@ -67,7 +67,7 @@ async function addSales(data){
 // need fixing
 async function updateSession(uuid, expiry, data){
     await connectDatabase()
-    let findSession = await sessions.findOne({"SessionKey": uuid})
+    let findSession = await session.findOne({"SessionKey": uuid})
     if(!findSession){
         await session.insertOne({
             "sessionKey": uuid,
@@ -85,7 +85,7 @@ async function updateSession(uuid, expiry, data){
 }
 
 async function getSession(key){
-    let sd = await sessions.findOne({SessionKey:key}).data;
+    let sd = await session.findOne({"SessionKey":key});
     if(!sd){
         return undefined;
     }
@@ -93,7 +93,7 @@ async function getSession(key){
 }
 
 async function deleteSession(key){
-    await sessionsCollection.deleteOne({ sessionKey: key });
+    await session.deleteOne({ sessionKey: key });
 }
 
 module.exports = {
