@@ -26,12 +26,25 @@ app.post("/", async (req,res)=>{
     let session = await business.attemptLogin(username, password)
     if (session) {
         res.cookie('session', session.key, {expires: session.expiry})
-        res.redirect('/HomePage')
+        res.redirect(`/HomePage/${username}`)
     }
     else {
         res.redirect('/?message=Invalid Credentials')
     }
 })
+
+
+
+
+app.get("/Manager", async (req, res)=>{
+    let stationData = await business.getStation(1001)
+
+    res.render('ManagerPage',{
+        layout: undefined,
+        station: stationData
+    })
+})
+
 
 
 
