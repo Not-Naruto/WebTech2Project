@@ -12,6 +12,7 @@ app.set('view engine', 'handlebars')
 app.engine('handlebars', handlebars.engine())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser())
+app.use(express.static('static'));
 
 app.get("/", async (req,res)=>{
     let message = req.query.message
