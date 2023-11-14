@@ -15,7 +15,6 @@ app.use(cookieParser())
 
 app.get("/", async (req,res)=>{
     let message = req.query.message
-    console.log("hello world")
     res.render('LoginPage', {
         message: message
     })
