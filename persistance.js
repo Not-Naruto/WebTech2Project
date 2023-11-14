@@ -43,11 +43,11 @@ async function getUser(name){
 
 async function getStation(id){
     await connectDatabase();
-    let station = await station.findOne({StationID: id});
-    if(!station){
+    let findStation = await station.findOne({StationID: id});
+    if(!findStation){
         return false;
     }
-    return station;
+    return findStation;
 }
 
 async function updateStation(id, data){
