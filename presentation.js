@@ -56,11 +56,23 @@ app.get("/HomePage", async(req,res)=>{
 
 
 app.get("/Manager/:ManagerName", async (req, res)=>{
-    let stationData = await business.getStation(1001)
     let ManagerName = req.params.ManagerName
+    let stationData = await business.findStationByManagerName(ManagerName)
+    let fuelTypeSuper = stationData.Fuel[1].price
+    let fuelTypePremium = stationData.Fuel[0].price
+    console.log(fuelTypeSuper)
+    if(!stationData){
+        manageStation = false;
+    }
+    else{
+        manageStation=true;
+    }
     res.render('ManagerPage',{
         station: stationData,
-        ManagerName: ManagerName
+        ManagerName: ManagerName,
+        isManaging:manageStation,
+        premium: fuelTypePremium,
+        super: fuelTypeSuper
     })
 })
 
@@ -69,5 +81,8 @@ app.get("/logout", async (req,res)=>{
     res.clearCookie("session");
     res.redirect('/');
 })
+
+
+
 
 app.listen(8000, () => {console.log("App running at port 8000")})

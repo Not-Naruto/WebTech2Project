@@ -1,9 +1,108 @@
 <html>
-    <head>
-        <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/css/coreui.min.css" rel="stylesheet"
+
+<head>
+    
+</head>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/css/coreui.min.css" rel="stylesheet"
         integrity="sha384-2E9/b2fZ+VJoP6eRIpzzMFkuqbh0qDkIFVLzJJwkESsdKPEwzb0n6E55enZ+Ee8V" crossorigin="anonymous">
-    </head>
-    <body>
-        <h3>{{ManagerName}}</h3>
-    </body>
+    <title>Manager Page</title>
+    <!-- Add your custom styles here -->
+    <style>
+        body {
+            padding-top: 60px; /* Adjust the top padding according to your navigation bar height */
+        }
+
+        .sales-table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div>
+        <h3 class="m-0">{{ManagerName}}</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">Home</li>
+                <li class="breadcrumb-item ">Manager</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Station Information -->
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Station Information</h5>
+        <p class="card-text"><strong>Station Name:</strong> {{station.Name}}</p>
+        <p class="card-text"><strong>Premium Price:</strong> ${{premium}} per Liter</p>
+        <p class="card-text"><strong>Super Price:</strong> ${{super}} per Liter</p>
+    </div>
+</div>
+
+
+    <!-- Sales Section -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Sales</h5>
+            
+            <!-- Date Selection -->
+            <div class="form-group">
+                <label for="selectDate">Select Date:</label>
+                <input type="date" class="form-control" id="selectDate">
+            </div>
+
+            <!-- Sales Table -->
+<div class="table-responsive sales-table">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type of Fuel</th>
+                <th>Quantity (Liter)</th>
+                <th>Total Sales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Sales data goes here -->
+            <tr>
+                <td>2023-11-15</td>
+                <td>Premium</td>
+                <td>50</td>
+                <td>$75.00</td>
+            </tr>
+            <tr>
+                <td>2023-11-15</td>
+                <td>Super</td>
+                <td>50</td>
+                <td>$100.00</td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+        </div>
+            </div>
+            
+        </div>
+        <!-- Action Buttons -->
+            <div class="mt-3">
+                <button class="btn btn-primary mr-2">Delivery</button>
+                <button class="btn btn-success">Record Sales</button>
+            </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies (make sure you include jQuery and Popper.js) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
 </html>

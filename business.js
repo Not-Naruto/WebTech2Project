@@ -91,6 +91,16 @@ async function getFlash(key){
         return result 
     }
 }
+
+async function findStationByManagerName(ManagerName){
+    let allStation = await persistance.getAllStations()
+    for(let i=0; i<allStation.length; i++){
+        if(ManagerName == allStation[i].Manager){
+            return allStation[i]
+        }
+    }
+    return undefined
+}
 module.exports = {
     getAllUsers,
     getAllStations,
@@ -104,7 +114,8 @@ module.exports = {
     cancelToken,
     setFlash,
     getFlash,
-    attemptLogin
+    attemptLogin,
+    findStationByManagerName
 
 }
 
