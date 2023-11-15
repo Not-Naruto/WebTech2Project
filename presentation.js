@@ -25,19 +25,28 @@ app.post("/", async (req,res)=>{
     let password = req.body.password
     let session = await business.attemptLogin(username, password)
     if (session) {
-        res.cookie('session', session.key, {expires: session.expiry})
-        res.redirect(`/HomePage/${username}`)
+        res.cookie('session', session)
+        res.redirect(`/HomePage`)
     }
     else {
         res.redirect('/?message=Invalid Credentials')
     }
 })
-app.get("/HomePage/:username", async(req,res)=>{
-    let userdetail =await business.getUser(req.params.username)
-    if(userdetail.UserType== "Manager"){
-        res.redirect("/Manager")
-    }else if (userdetail.UserType== "Admin"){
-        res.redirect("/Admin")
+app.get("/HomePage", async(req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/');
+        return;
+    }
+    if(sd.type== "Manager"){
+        res.redirect(`/Manager/${sd.username}`)
+    }else if (sd.type== "Admin"){
+        res.redirect(`/Admin/${sd.username}`)
     }else{
         res.redirect("/Guest")
     }
@@ -55,8 +64,10 @@ app.get("/Manager/:ManagerName", async (req, res)=>{
     })
 })
 
-
-
-
+app.get("/logout", async (req,res)=>{
+    await business.deleteSession(req.cookies.session)
+    res.clearCookie("session");
+    res.redirect('/');
+})
 
 app.listen(8000, () => {console.log("App running at port 8000")})
