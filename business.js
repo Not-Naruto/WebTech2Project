@@ -12,8 +12,8 @@ async function attemptLogin(user,pass){
     }
 
     key = await startSession(data)
-    let sd = await persistance.getSession(key)
-    return sd
+    
+    return key
 }
 
 async function getAllUsers(){
