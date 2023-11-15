@@ -46,11 +46,12 @@ app.get("/HomePage/:username", async(req,res)=>{
 
 
 
-app.get("/Manager", async (req, res)=>{
+app.get("/Manager/:ManagerName", async (req, res)=>{
     let stationData = await business.getStation(1001)
-    console.log(stationData)
+    let ManagerName = req.params.ManagerName
     res.render('ManagerPage',{
-        station: stationData
+        station: stationData,
+        ManagerName: ManagerName
     })
 })
 

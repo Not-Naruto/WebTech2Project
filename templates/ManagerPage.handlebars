@@ -1,14 +1,9 @@
-<body>
-    <h3>Station Details</h3>
-    <h4>Name: {{station.Name}}</h4>
-    <h4>Location: {{station.Location}}</h4>
-    <h4>Manager: {{station.Manager}}</h4>
-    
-    <h3>Current Fuel Prices</h3>
-    {{#each station.Fuel}}
-        <h4>Type: {{this.type}}, Price: {{this.price}}, Remaining: {{this.remaining}}</h4>
-    {{/each}}
-    
-    <a href="#">Delivery</a>
-    <a href="#">Sales</a>
-</body>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/css/coreui.min.css" rel="stylesheet"
+        integrity="sha384-2E9/b2fZ+VJoP6eRIpzzMFkuqbh0qDkIFVLzJJwkESsdKPEwzb0n6E55enZ+Ee8V" crossorigin="anonymous">
+    </head>
+    <body>
+        <h3>{{ManagerName}}</h3>
+    </body>
+</html>
