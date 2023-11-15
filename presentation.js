@@ -60,7 +60,7 @@ app.get("/Manager/:ManagerName", async (req, res)=>{
     let stationData = await business.findStationByManagerName(ManagerName)
     let fuelTypeSuper = stationData.Fuel[1].price
     let fuelTypePremium = stationData.Fuel[0].price
-    console.log(fuelTypeSuper)
+    
     if(!stationData){
         manageStation = false;
     }
