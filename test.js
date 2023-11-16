@@ -1,8 +1,9 @@
 const bs = require("./business")
+const per = require('./persistance')
 
 async function test(){
-    console.log(await bs.getAllUsers())
-    console.log('s')
+    console.log(await bs.findSales('2023-10-16'))
+    
 }
 
 test()

@@ -101,6 +101,37 @@ async function findStationByManagerName(ManagerName){
     }
     return undefined
 }
+
+
+async function findSales(date) {
+    
+        const salesData = await persistance.findSales(date);
+
+        if (!salesData) {
+            return {
+                error: "No sales data found for the specified date."
+            };
+        }
+
+        const salesByType = salesData.Data.map(item => {
+            return {
+                Date: new Date(salesData.Date).toLocaleDateString('en-US'),
+                Type: item.type,
+                Quantity: item.quantity,
+                Sales: (item.quantity * item.unitPrice).toFixed(2)
+            };
+        });
+
+        const totalSalesSum = salesByType.reduce((sum, item) => sum + parseFloat(item.Sales), 0).toFixed(2);
+
+        return {
+            salesByType,
+            totalSalesSum,
+        };
+}
+
+
+
 module.exports = {
     getAllUsers,
     getAllStations,
@@ -115,7 +146,8 @@ module.exports = {
     setFlash,
     getFlash,
     attemptLogin,
-    findStationByManagerName
+    findStationByManagerName,
+    findSales
 
 }
 

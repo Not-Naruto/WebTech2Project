@@ -58,23 +58,53 @@ app.get("/HomePage", async(req,res)=>{
 app.get("/Manager/:ManagerName", async (req, res)=>{
     let ManagerName = req.params.ManagerName
     let stationData = await business.findStationByManagerName(ManagerName)
-    let fuelTypeSuper = stationData.Fuel[1].price
-    let fuelTypePremium = stationData.Fuel[0].price
+    let fuelTypePremium = undefined
+    let fuelTypeSuper = undefined
     
     if(!stationData){
         manageStation = false;
     }
     else{
         manageStation=true;
+        fuelTypeSuper = stationData.Fuel[1].price
+        fuelTypePremium = stationData.Fuel[0].price
     }
     res.render('ManagerPage',{
         station: stationData,
         ManagerName: ManagerName,
         isManaging:manageStation,
         premium: fuelTypePremium,
-        super: fuelTypeSuper
+        super: fuelTypeSuper,
     })
 })
+
+app.post("/Manager/:ManagerName", async (req, res)=>{
+    let ManagerName = req.params.ManagerName
+    let viewSales = req.body.salesDate
+    console.log(viewSales)
+    let stationData = await business.findStationByManagerName(ManagerName)
+    let sales = await business.findSales(viewSales)
+    let fuelTypePremium = undefined
+    let fuelTypeSuper = undefined
+    
+    if(!stationData){
+        manageStation = false;
+    }
+    else{
+        manageStation=true;
+        fuelTypeSuper = stationData.Fuel[1].price
+        fuelTypePremium = stationData.Fuel[0].price
+    }
+    res.render('ManagerPage',{
+        station: stationData,
+        ManagerName: ManagerName,
+        isManaging:manageStation,
+        premium: fuelTypePremium,
+        super: fuelTypeSuper,
+        sales:sales
+    })
+})
+
 
 app.get("/logout", async (req,res)=>{
     await business.deleteSession(req.cookies.session)

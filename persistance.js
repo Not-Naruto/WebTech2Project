@@ -98,6 +98,15 @@ async function deleteSession(key){
     await session.deleteOne({ "sessionKey": key });
 }
 
+async function findSales(date){
+    await connectDatabase()
+    let findSalesByDate = await sales.findOne({"Date": new Date(date)})
+    if(!findSalesByDate){
+        return undefined
+    }
+    return findSalesByDate
+}
+
 module.exports = {
     getAllUsers,
     getAllStations,
@@ -108,5 +117,6 @@ module.exports = {
     addSales,
     updateSession,
     getSession,
-    deleteSession
+    deleteSession,
+    findSales
 }
