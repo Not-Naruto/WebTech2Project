@@ -52,7 +52,9 @@ app.get("/HomePage", async(req,res)=>{
     }
 })
 
-
+app.get('/Stations', (req, res)=>{
+    res.render('Stations')
+})
 
 
 app.get("/Manager/:ManagerName", async (req, res)=>{
