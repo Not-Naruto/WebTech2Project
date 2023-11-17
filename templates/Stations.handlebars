@@ -1,4 +1,70 @@
 <head>
-
-
+    <style>
+        a:hover {
+            transition: transform 0.3s ease;
+            transform: scale(1.03);
+            color: black;
+        }
+    </style>
 </head>
+
+<body>
+    <h1>List of Stations</h1>
+    <div class="text-secondary border-2 my-3">
+        <hr>
+    </div>
+    <div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 g-4">
+        {{#each stationList}}
+
+        <div class="col">
+            <a href="#" class="card h-100 rounded-4 shadow bg-body-tertiary text-decoration-none"
+                style="overflow: hidden;">
+
+                {{#if this.isWoqod}}
+                <div class="d-flex"
+                    style="background: #00448A;height: 200px; align-items: center; justify-content:center">
+                    <img src="/static/img/woqod_logo.png" class="h-75" style="max-width: 85%;">
+                </div>
+
+                {{else}}
+                <div class="d-flex"
+                    style="background: #cad8f3;height: 200px; align-items: center; justify-content:center">
+                    <img src="/static/img/mobil1_logo.png" class="h-50" style="max-width: 85%;">
+                </div>
+                {{/if}}
+
+                <div class="card-body">
+                    <h4 class="card-title">{{this.Name}}: {{this.StationID}}</h4>
+                    <h5>Location: {{this.Location}}</h5>
+
+                    {{#each this.Fuel}}
+                    <div class="card my-3">
+                        {{#ifSuper this.type}}
+                        <h6 class="card-header" style="background: #BDB136;">{{this.type}}</h6>
+                        {{else}}
+                        <h6 class="card-header text-white" style="background: #5d7a97;">{{this.type}}</h6>
+                        {{/ifSuper}}
+                        <div class="card-body">
+                            <div>
+                                Price: {{this.price}} QR/L
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                                <p>Remaining: {{this.remaining}} L</p>
+                                {{#ifLow this.remaining}}
+                                <span class="text-danger text-end">Low Fuel</span>
+                                {{/ifLow}}
+                            </div>
+
+
+                        </div>
+                    </div>
+                    {{/each}}
+
+                </div>
+            </a>
+        </div>
+
+        {{/each}}
+
+    </div>
+</body>

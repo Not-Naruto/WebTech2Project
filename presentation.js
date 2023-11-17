@@ -3,9 +3,19 @@ const business = require('./business.js')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const handlebars = require('express-handlebars')
+const Handlebars = require("handlebars");
 const e = require('express')
 
 let app = express()
+
+Handlebars.registerHelper('ifSuper', function(arg1, options) {
+    return arg1 === "Super" ? options.fn(this) : options.inverse(this);
+  });
+
+Handlebars.registerHelper('ifLow', function(arg1, options){
+    arg1 = parseInt(arg1);
+    return arg1<50? options.fn(this):options.inverse(this);
+})
 
 app.set('views', __dirname+"/templates")
 app.set('view engine', 'handlebars')
@@ -50,10 +60,6 @@ app.get("/HomePage", async(req,res)=>{
     }else{
         res.redirect("/Guest")
     }
-})
-
-app.get('/Stations', (req, res)=>{
-    res.render('Stations')
 })
 
 
@@ -104,6 +110,17 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
         premium: fuelTypePremium,
         super: fuelTypeSuper,
         sales:sales
+    })
+})
+
+app.get('/Stations', async (req,res)=>{
+    let stations = await business.getAllStations();
+    stations = stations.map((item)=>{
+        return {...item, isWoqod:item.Name==="Woqod"}
+    })
+    console.log(stations)
+    res.render('Stations', {
+        stationList: stations
     })
 })
 
