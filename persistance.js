@@ -87,6 +87,7 @@ async function updateSession(uuid, expiry, data){
 }
 
 async function getSession(key){
+    await connectDatabase()
     let sd = await session.findOne({"sessionKey":key});
     if(!sd){
         return undefined;
@@ -95,6 +96,7 @@ async function getSession(key){
 }
 
 async function deleteSession(key){
+    await connectDatabase()
     await session.deleteOne({ "sessionKey": key });
 }
 
