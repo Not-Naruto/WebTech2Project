@@ -6,11 +6,7 @@
     </style>
 </head>
 
-{{#if message}}
-<div class="alert alert-danger mx-5" role="alert">
-    Alert: {{message}}
-</div>
-{{/if}}
+
 <form method="post" class="container mx-auto w-75">
     <div class="card m-5 shadow align-middle">
         <div class="card-body">
@@ -34,4 +30,9 @@
             <p class="text-center"><a href="#" class="text-muted">Login as Guest</a></p>
         </div>
     </div>
+    {{#if message}}
+    <div class="alert alert-danger mx-5" role="alert">
+        Alert: {{message}}
+    </div>
+    {{/if}}
 </form>
