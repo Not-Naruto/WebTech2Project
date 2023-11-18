@@ -141,6 +141,13 @@ async function updateAddSales(date, ManagerName, data){
     return true
 }
 
+async function addFuel(stationID, sup, pre){
+    let station = await persistance.getStation(parseInt(stationID));
+    station.Fuel[0].remaining += pre;
+    station.Fuel[1].remaining += sup;
+    await persistance.updateStation(stationID, station)
+}
+
 
 
 module.exports = {
@@ -159,7 +166,8 @@ module.exports = {
     attemptLogin,
     findStationByManagerName,
     findSales,
-    updateAddSales
+    updateAddSales,
+    addFuel
 
 }
 
