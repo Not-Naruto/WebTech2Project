@@ -1,3 +1,4 @@
+const { stat } = require('fs/promises')
 const persistance = require('./persistance')
 const crypto = require('crypto')
 
@@ -103,9 +104,10 @@ async function findStationByManagerName(ManagerName){
 }
 
 
-async function findSales(date) {
+async function findSales(date, ManagerName) {
     
-        const salesData = await persistance.findSales(date);
+        let stationData = await findStationByManagerName(ManagerName)
+        let salesData = await persistance.findSales(date, stationData.StationID);
 
         if (!salesData) {
             return {
@@ -128,6 +130,15 @@ async function findSales(date) {
             salesByType,
             totalSalesSum,
         };
+}
+
+async function updateAddSales(date, ManagerName, data){
+    let stationData = await findStationByManagerName(ManagerName)
+    let updateAdd = await persistance.updateAddSales(date, stationData.StationID, data)
+    if(!updateAdd){
+        return false
+    }
+    return true
 }
 
 async function addFuel(stationID, sup, pre){
@@ -155,6 +166,7 @@ module.exports = {
     attemptLogin,
     findStationByManagerName,
     findSales,
+    updateAddSales,
     addFuel
 
 }

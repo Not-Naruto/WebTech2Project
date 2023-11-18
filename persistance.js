@@ -100,13 +100,32 @@ async function deleteSession(key){
     await session.deleteOne({ "sessionKey": key });
 }
 
-async function findSales(date){
+async function findSales(date, stationID){
     await connectDatabase()
-    let findSalesByDate = await sales.findOne({"Date": new Date(date)})
+    let findSalesByDate = await sales.findOne({"Date": new Date(date), "StationID": stationID})
     if(!findSalesByDate){
         return undefined
     }
     return findSalesByDate
+}
+
+async function updateAddSales(date, stationID, data){
+    await connectDatabase()
+    let findSalesByDate = await sales.findOne({"Date": new Date(date), "StationID": stationID})
+    if(!findSalesByDate){
+        await sales.insertOne({
+            "Date": new Date(Date.now()),
+            "StationID": stationID,
+            "Data": data
+        })
+    }else{
+        await sales.replaceOne({"Date":date, "StationID": stationID}, {
+            "Date": new Date(Date.now()),
+            "StationID": stationID,
+            "Data": data
+        })
+    }
+    return  await sales.findOne({"Date": new Date(date), "StationID": stationID})
 }
 
 module.exports = {
@@ -120,5 +139,6 @@ module.exports = {
     updateSession,
     getSession,
     deleteSession,
-    findSales
+    findSales,
+    updateAddSales
 }
