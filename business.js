@@ -136,10 +136,8 @@ async function findSales(date, ManagerName) {
 async function updateAddSales(date, ManagerName, data){
     let stationData = await findStationByManagerName(ManagerName)
     let updateAdd = await persistance.updateAddSales(date, stationData.StationID, data)
-    if(!updateAdd){
-        return false
-    }
-    return true
+    return updateAdd
+    
 }
 
 async function addFuel(stationID, sup, pre){
