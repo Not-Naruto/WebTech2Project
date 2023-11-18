@@ -113,9 +113,25 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
     })
 })
 
-app.get('/:ManagerName/:stationName/recordSales', (req, res)=>{
-    res.render('RecordSales')
+app.get('/:ManagerName/:stationName/recordSales', async (req, res)=>{
+    let managerName = req.params.ManagerName
+    let stationData = await business.findStationByManagerName(managerName)
+    res.render('RecordSales',{
+        ManagerName: managerName,
+        StationID: stationData.StationID
+    })
 })
+
+app.post('/:ManagerName/:stationName/recordSales', async (req, res)=>{
+    let date = req.body.datepicker
+    let premiumFuel = req.body.premiumFuel
+    let superFuel = req.body.superFuel
+
+
+    let updateAdd = await business.updateAddSales(date, req.params.ManagerName, )
+})
+
+
 
 app.get('/Stations', async (req,res)=>{
     let stations = await business.getAllStations();
