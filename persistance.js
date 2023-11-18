@@ -111,21 +111,24 @@ async function findSales(date, stationID){
 
 async function updateAddSales(date, stationID, data){
     await connectDatabase()
+    let dateNow = new Date()
+    dateNow.setHours(0)
+    dateNow.setMinutes(0)
+    dateNow.setSeconds(0)
     let findSalesByDate = await sales.findOne({"Date": new Date(date), "StationID": stationID})
     if(!findSalesByDate){
         await sales.insertOne({
-            "Date": new Date(Date.now()),
+            "Date": new Date(dateNow),
             "StationID": stationID,
             "Data": data
         })
     }else{
         await sales.replaceOne({"Date":new Date(date), "StationID": stationID}, {
-            "Date": new Date(Date.now()),
+            "Date": new Date(date),
             "StationID": stationID,
             "Data": data
         })
     }
-    return  await sales.findOne({"Date": new Date(date), "StationID": stationID})
 }
 
 module.exports = {
