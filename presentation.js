@@ -105,6 +105,10 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
     })
 })
 
+app.get('/:ManagerName/:stationName/recordSales', (req, res)=>{
+    res.render('RecordSales')
+})
+
 
 app.get("/logout", async (req,res)=>{
     await business.deleteSession(req.cookies.session)
