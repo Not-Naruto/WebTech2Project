@@ -130,6 +130,13 @@ async function findSales(date) {
         };
 }
 
+async function addFuel(stationID, sup, pre){
+    let station = await persistance.getStation(parseInt(stationID));
+    station.Fuel[0].remaining += pre;
+    station.Fuel[1].remaining += sup;
+    await persistance.updateStation(stationID, station)
+}
+
 
 
 module.exports = {
@@ -147,7 +154,8 @@ module.exports = {
     getFlash,
     attemptLogin,
     findStationByManagerName,
-    findSales
+    findSales,
+    addFuel
 
 }
 

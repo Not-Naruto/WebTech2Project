@@ -99,9 +99,15 @@
     </div>
     <!-- Action Buttons -->
     <div class="mt-3">
-        <a class="btn btn-primary mr-2" href="/{{station.Name}}/Delivery">Delivery</a> 
+        <a class="btn btn-primary mr-2" href="/{{ManagerName}}/{{station.StationID}}/delivery">Delivery</a>
         <a class="btn btn-success" href="/{{ManagerName}}/{{station.Name}}/recordSales">Record Sales</a>
     </div>
+    {{#if msg}}
+    <div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
+        <strong>Alert:</strong> {{msg}}
+        <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{/if}}
     </div>
     {{else}}
     <div class="card w-75">
@@ -119,11 +125,13 @@
     {{/if}}
 
 
+
+
     <!-- Bootstrap JS and dependencies-->
-    {{!--
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>
 

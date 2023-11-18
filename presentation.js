@@ -78,6 +78,7 @@ app.get("/Manager/:ManagerName", async (req, res)=>{
         fuelTypePremium = stationData.Fuel[0].price
     }
     res.render('ManagerPage',{
+        msg:req.query.msg,
         station: stationData,
         ManagerName: ManagerName,
         isManaging:manageStation,
@@ -103,6 +104,7 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
         fuelTypeSuper = stationData.Fuel[1].price
         fuelTypePremium = stationData.Fuel[0].price
     }
+
     res.render('ManagerPage',{
         station: stationData,
         ManagerName: ManagerName,
@@ -122,10 +124,27 @@ app.get('/Stations', async (req,res)=>{
     stations = stations.map((item)=>{
         return {...item, isWoqod:item.Name==="Woqod"}
     })
-    console.log(stations)
     res.render('Stations', {
         stationList: stations
     })
+})
+
+app.get('/:ManagerName/:stationID/delivery', async (req, res)=>{
+    let station = await business.getStation(parseInt(req.params.stationID));
+    if (req.params.ManagerName == station.Manager){
+        res.render("Delivery", {
+            station: station
+        })
+    }else{
+        res.redirect(`/Manager/${req.params.ManagerName}?msg=Lacking permissions to access screen`)
+    }
+})
+
+app.post('/:ManagerName/:stationID/delivery', async(req,res)=>{
+    let superFuel = parseInt(req.body.superFuel);
+    let premiumFuel = parseInt(req.body.premiumFuel);
+    await business.addFuel(req.params.stationID, superFuel, premiumFuel)
+    res.redirect(`/Manager/${req.params.ManagerName}?msg=Fuel Delivery recorded`)
 })
 
 

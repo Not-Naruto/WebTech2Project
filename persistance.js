@@ -54,7 +54,7 @@ async function getStation(id){
 
 async function updateStation(id, data){
     await connectDatabase();
-    await station.replaceOne({stationID:id}, data);
+    await station.replaceOne({StationID:parseInt(id)}, data);
 }
 
 async function updateUser(id, data){
