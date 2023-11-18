@@ -143,7 +143,7 @@ app.post('/:ManagerName/:stationName/recordSales', async (req, res)=>{
     ]
 
     let updateAdd = await business.updateAddSales(date, req.params.ManagerName, data)
-    res.redirect(`/Manager/${req.params.ManagerName}?msg=Fuel Delivery recorded`)
+    res.redirect(`/Manager/${req.params.ManagerName}?msg=Fuel Sale recorded`)
 })
 
 
