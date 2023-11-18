@@ -119,7 +119,7 @@ async function updateAddSales(date, stationID, data){
             "Data": data
         })
     }else{
-        await sales.replaceOne({"Date":date, "StationID": stationID}, {
+        await sales.replaceOne({"Date":new Date(date), "StationID": stationID}, {
             "Date": new Date(Date.now()),
             "StationID": stationID,
             "Data": data

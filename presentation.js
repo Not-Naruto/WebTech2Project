@@ -92,7 +92,7 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
     let viewSales = req.body.salesDate
     console.log(viewSales)
     let stationData = await business.findStationByManagerName(ManagerName)
-    let sales = await business.findSales(viewSales)
+    let sales = await business.findSales(viewSales, ManagerName)
     let fuelTypePremium = undefined
     let fuelTypeSuper = undefined
     
@@ -126,11 +126,24 @@ app.get('/:ManagerName/:stationName/recordSales', async (req, res)=>{
 
 app.post('/:ManagerName/:stationName/recordSales', async (req, res)=>{
     let date = req.body.datepicker
-    let premiumFuel = req.body.premiumFuel
-    let superFuel = req.body.superFuel
+    let premiumFuel = parseInt(req.body.premiumFuel)
+    let superFuel = parseInt(req.body.superFuel)
+    let stationData = await business.findStationByManagerName(req.params.ManagerName) 
+    let data = [
+        {
+            type:"Super",
+            quantity:superFuel,
+            unitPrice: stationData.Fuel[0].price
+        },
+        {
+            type:"Premium",
+            quantity:premiumFuel,
+            unitPrice: stationData.Fuel[1].price
+        }
+    ]
 
-
-    let updateAdd = await business.updateAddSales(date, req.params.ManagerName, )
+    let updateAdd = await business.updateAddSales(date, req.params.ManagerName, data)
+    res.redirect(`/Manager/${req.params.ManagerName}?msg=Fuel Delivery recorded`)
 })
 
 

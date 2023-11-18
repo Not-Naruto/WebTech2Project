@@ -107,6 +107,7 @@ async function findStationByManagerName(ManagerName){
 async function findSales(date, ManagerName) {
     
         let stationData = await findStationByManagerName(ManagerName)
+        console.log(stationData)
         let salesData = await persistance.findSales(date, stationData.StationID);
 
         if (!salesData) {
