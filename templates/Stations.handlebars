@@ -48,10 +48,13 @@
                             <div>
                                 Price: {{this.price}} QR/L
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                            <div>
                                 <p>Remaining: {{this.remaining}} L</p>
                                 {{#ifLow this.remaining}}
                                 <span class="text-danger text-end">Low Fuel</span>
+                                {{else}}
+                                <span class="text-success text-end">Sufficient Fuel</span>
+
                                 {{/ifLow}}
                             </div>
 
