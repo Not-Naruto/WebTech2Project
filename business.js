@@ -133,6 +133,29 @@ async function findSales(date, id) {
         };
 }
 
+async function findAllSales() {
+    let uniqueStationsWithSales = [];
+    let rawsales = await persistance.findAllSales();
+
+    for (let sales of rawsales) {
+        // Check if an object with the same StationID is already in the array
+        let existingSales = uniqueStationsWithSales.find(item => item.StationID === sales.StationID);
+
+        if (!existingSales) {
+            // If an object with the same StationID does not exist, add the current sales object to the array
+            uniqueStationsWithSales.push(sales);
+        }
+    }
+
+    // Sort the array based on the StationID in ascending order
+    uniqueStationsWithSales.sort((a, b) => a.StationID - b.StationID);
+
+    return uniqueStationsWithSales;
+}
+
+
+
+
 async function updateAddSales(date, id, data){
     let stationData = await getStation(id)
     await persistance.updateAddSales(date, stationData.StationID, data)
@@ -140,6 +163,36 @@ async function updateAddSales(date, id, data){
     stationData.Fuel[1].remaining-=data[0].quantity;
     await persistance.updateStation(id, stationData);
 }
+
+async function calculateTotalSalesPerStation() {
+    try {
+        // Get all sales data
+        const allSales = await persistance.findAllSales();
+
+        // Initialize an object to store total sales per station
+        const totalSalesPerStation = {};
+
+        // Iterate through each sale
+        allSales.forEach(sale => {
+            const stationID = sale.StationID;
+
+            // If stationID doesn't exist in the totalSalesPerStation object, initialize it
+            if (!totalSalesPerStation[stationID]) {
+                totalSalesPerStation[stationID] = 0;
+            }
+
+            // Calculate the total sales for the current sale and add it to the totalSalesPerStation
+            const totalSalesForSale = sale.Data.reduce((total, item) => total + item.quantity * item.unitPrice, 0);
+            totalSalesPerStation[stationID] += totalSalesForSale;
+        });
+
+        return totalSalesPerStation;
+    } catch (error) {
+        console.error("Error calculating total sales per station:", error);
+        throw error;
+    }
+}
+
 
 async function addFuel(stationID, sup, pre){
     let station = await persistance.getStation(parseInt(stationID));
@@ -175,7 +228,9 @@ module.exports = {
     findStationByManagerId,
     findSales,
     updateAddSales,
-    addFuel
+    addFuel,
+    findAllSales,
+    calculateTotalSalesPerStation
 
 }
 

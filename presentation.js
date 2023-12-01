@@ -214,8 +214,14 @@ app.post('/:stationID/delivery', async(req,res)=>{
 
 
 //making admin homePage
-app.get('/admin/:adminName', (req, res)=>{
-    res.render('adminPage')
+app.get('/admin/:adminName', async (req, res)=>{
+    let sales = await business.findAllSales()
+    let totalSales = await business.calculateTotalSalesPerStation()
+    res.render('adminPage',{
+        adminName: req.params.adminName,
+        sales:sales,
+        total: totalSales
+    })
 })
 
 app.get("/logout", async (req,res)=>{
