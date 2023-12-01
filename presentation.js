@@ -201,9 +201,42 @@ app.get("/AccountInfo", async (req,res)=>{
         return;
     }
     user=sd.username
-    res.render('AccountInfo')
+    userDetails = await business.getUser(user)
+    res.render('AccountInfo',{details: userDetails})
 })
 
+app.post("/AccountInfo", async (req,res)=>{
+    console.log(req.body)
+    id = req.body.userId
+    userName = req.body.NewUser
+    phoneNumber = req.body.phoneNumber
+
+    user = await business.getUserById(parseInt(id))
+    if(!user){
+        console.log("Not found")
+    }
+    if(userName != ""){
+        user.Name = userName
+    }
+    if(phoneNumber!= ""){
+        user.PhoneNumber = parseInt(phoneNumber)
+    }
+    console.log(user)
+    await business.updateUser(parseInt(id),user)
+})
+app.get("/ResetPassword/:id", async (req,res)=>{
+    res.render("ResetPassword")
+})
+app.post("/ResetPassword/:id", async (req,res)=>{
+    id= parseInt(req.params.id)
+    user = await business.getUserById(parseInt(id))
+    user.Password = req.body.Password
+    await business.updateUser(id,user)
+    res.redirect("/AccountInfo")
+})
+app.get("/ContactUs", async (req,res)=>{
+    res.render("ContactUs")
+})
 
 
 

@@ -33,8 +33,8 @@ async function getAllStations(){
     return allStation
 }
 
-async function getUser(id){
-    return await persistance.getUser(id)
+async function getUser(Name){
+    return await persistance.getUser(Name)
 }
 
 async function getStation(id){
@@ -146,10 +146,18 @@ async function addFuel(stationID, sup, pre){
     station.Fuel[1].remaining += sup;
     await persistance.updateStation(stationID, station)
 }
+async function updateUser(id, data){
+    await persistance.updateUser(id, data)
+}
+async function getUserById(id){
+    return await persistance.getUserById(id)
+}
 
 
 
 module.exports = {
+    getUserById,
+    updateUser,
     getAllUsers,
     getAllStations,
     getUser,

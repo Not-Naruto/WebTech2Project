@@ -33,7 +33,14 @@ async function getAllStations(){
     let result = await rawData.toArray();
     return result;
 }
-
+async function getUserById(id){
+    await connectDatabase();
+    let student = await users.findOne({ UserID: id});
+    if(!student){
+        return false;
+    }
+    return student;
+}
 async function getUser(name){
     await connectDatabase();
     let student = await users.findOne({ Name: name});
@@ -129,6 +136,7 @@ async function updateAddSales(date, stationID, data){
 }
 
 module.exports = {
+    getUserById,
     getAllUsers,
     getAllStations,
     getUser,
