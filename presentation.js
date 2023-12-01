@@ -317,6 +317,7 @@ app.get("/ContactUs", async (req,res)=>{
 
 app.use((req,res)=>{
     res.status(404).render('notFound');
+    res.status(500).render('Error')
 })
 
 
