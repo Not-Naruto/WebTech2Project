@@ -1,0 +1,125 @@
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/css/coreui.min.css" rel="stylesheet"
+        integrity="sha384-2E9/b2fZ+VJoP6eRIpzzMFkuqbh0qDkIFVLzJJwkESsdKPEwzb0n6E55enZ+Ee8V" crossorigin="anonymous">
+
+    <style>
+        .container {
+            display: flex;
+
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .overlaySuper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(182, 182, 0, 0.6);
+        }
+
+        .overlayPremium {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(82, 182, 0, 0.6);
+        }
+
+        .super-text {
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+
+            margin: 0;
+
+        }
+
+        .badge {
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+
+<body class="mx-5">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex  flex-row">
+            <div class="card shadow" style="max-width: 400px;">
+                <div class="image-container" style="width: 100%; height: 200px;">
+                    <img src="https://media.istockphoto.com/id/1407850410/photo/gas-station-work.webp?b=1&s=170667a&w=0&k=20&c=5K0XYxzGXt0CWK7San8jCdrJrUgZLrwyEk1eYFn4r_A="
+                        style="height: 100%; width: 100%;">
+                    <div class="overlaySuper" style="display: flex; align-items: center; justify-content: center;">
+                        <p class="super-text">SUPER</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Fuel Information</h5>
+                    <div class="row mb-4">
+                        <div class="col-8">
+                            <p class="mb-1">Fuel Type: Super</p>
+                            <p class="mb-0">Remaining: {{premium.remaining}} L</p>
+                            {{#ifLow premium.remaining}}
+                            <div class="badge bg-danger">Low</div>
+                            {{else}}
+                            <div class="badge bg-success">Sufficient</div>
+                            {{/ifLow}}
+                        </div>
+                        <div class="col-4">
+                            <p class="mb-1">Fuel Price:</p>
+                            <p>${{premium.price}}/L</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="mx-5 d-flex  ">
+            <div class="card shadow" style="max-width: 400px;">
+                <div class="image-container" style="width: 100%; height: 200px;">
+                    <img src="https://media.istockphoto.com/id/1407850410/photo/gas-station-work.webp?b=1&s=170667a&w=0&k=20&c=5K0XYxzGXt0CWK7San8jCdrJrUgZLrwyEk1eYFn4r_A="
+                        style="height: 100%; width: 100%;">
+                    <div class="overlayPremium" style="display: flex; align-items: center; justify-content: center;">
+                        <p class="super-text">PREMIUM</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Fuel Information</h5>
+                    <div class="row mb-4">
+                        <div class="col-8">
+                            <p class="mb-1">Fuel Type: Premium</p>
+                            <p class="mb-0">Remaining: {{super.remaining}} L</p>
+
+                            {{#ifLow super.remaining}}
+                            <div class="badge bg-danger">Low</div>
+                            {{else}}
+                            <div class="badge bg-success">Sufficient</div>
+                            {{/ifLow}}
+                        </div>
+                        <div class="col-4">
+                            <p class="mb-1">Fuel Price:</p>
+                            <p>${{super.price}}/L</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {{!-- here --}}
+    </div>
+</body>
+
+</html>

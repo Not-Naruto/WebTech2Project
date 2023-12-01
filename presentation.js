@@ -177,8 +177,40 @@ app.get('/Stations', async (req,res)=>{
         return {...item, isWoqod:item.Name==="Woqod"}
     })
     res.render('Stations', {
-        stationList: stations
+        stationList: stations,
+        msg:req.query.msg
     })
+})
+
+app.get('/Stations/:stationID', async (req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/');
+        return;
+    }
+
+    let stationID = parseInt(req.params.stationID)
+    let station = await business.getStation(stationID)
+    let admin = false;
+    if (sd.type == 'Admin'){
+        admin = true;
+    }
+    if(sd.userID == station.ManagerID || sd.type == 'Admin'){
+        res.render("StationPage",{
+            station:station,
+            admin: admin,
+            super: station.Fuel[0],
+            premium: station.Fuel[1]
+        }
+        )
+    }else{
+        res.redirect("/Stations/?msg=Insufficient permission")
+    }
 })
 
 app.get('/:stationID/delivery', async (req, res)=>{
