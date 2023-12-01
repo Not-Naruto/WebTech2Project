@@ -1,10 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Account Information</title>
-  
+  <script>
+    function validateForm() {
+      var usernameInput = document.getElementById('newUsername');
+      var phoneNumberInput = document.getElementById('newPhoneNumber');
+      if ((usernameInput && usernameInput.value.trim() !== '') || (phoneNumberInput && phoneNumberInput.value.trim() !== '')) {
+        if (phoneNumberInput && phoneNumberInput.value.trim() !== '') {
+          if (isValidPhoneNumber(phoneNumberInput.value.trim())) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    }
+    function isValidPhoneNumber() {
+      var phoneNumberInput = document.getElementById('newPhoneNumber');
+      let error = document.getElementById('error')
+      if (phoneNumberInput.value != "") {
+        var phoneNumber = parseInt(phoneNumberInput.value, 10);
+        if (!isNaN(phoneNumber) && phoneNumber >= 30000000 && phoneNumber <= 80000000) {
+          error.style.display = 'none';
+          return true;
+        } else {
+          error.style.display = 'block';
+          return false;
+        }
+      } else {
+        return true
+        error.style.display = 'none';
+      }
+
+    }
+
+  </script>
   <style>
     .account-info-container {
       max-width: 600px;
@@ -14,61 +52,73 @@
       border-radius: 10px;
       margin-top: 50px;
     }
+
     .form-group {
       margin-bottom: 20px;
     }
+
+    label {
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="container account-info-container">
-  <h2>Account Information</h2>
+  <div class="container account-info-container">
+    <h2>Account Information</h2>
 
-
-  <div class="form-group">
-    <label for="username">Username:</label>
-    <p id="username">{{name}}</p>
-  </div>
-
-  <div class="form-group">
-    <label for="accountType">Account Type:</label>
-    <p id="accountType">{{userType}}</p>
-  </div>
-
-  <div class="form-group">
-    <label for="phoneNumber">Phone Number:</label>
-    <p id="phoneNumber">{{phoneNumber}}</p>
-  </div>
-
-  
-  <form id="updateForm">
     <div class="form-group">
-      <label for="newUsername">New Username:</label>
-      <input type="text" class="form-control" id="newUsername" placeholder="Enter new username">
+      <label for="userId">User ID:</label>
+      <p id="userId">{{details.UserID}}</p>
     </div>
 
     <div class="form-group">
-      <label for="newPhoneNumber">New Phone Number:</label>
-      <input type="tel" class="form-control" id="newPhoneNumber" placeholder="Enter new phone number">
+      <label for="username">Username:</label>
+      <p id="username">{{details.Name}}</p>
     </div>
 
-    <button type="button" class="btn btn-primary" onclick="updateInfo()">Update Information</button>
-    <button type="button" class="btn btn-danger" onclick="resetPassword()">Reset Password</button>
-  </form>
-</div>
+    <div class="form-group">
+      <label for="accountType">Account Type:</label>
+      <p id="accountType">{{details.UserType}}</p>
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number:</label>
+      <p id="phoneNumber">{{details.PhoneNumber}}</p>
+    </div>
 
 
-<script>
-  function updateInfo() {
-   
-    alert("User information updated!");
-  }
+    <form method="post" id="updateForm" class="container account-info-container" onsubmit="return validateForm()">
+      <input type="hidden" name="userId" value="{{details.UserID}}">
+      <div class="form-group">
+        <label for="newUsername">New Username:</label>
+        <input type="text" name="NewUser" class="form-control" id="newUsername" placeholder="Enter new username">
+      </div>
 
-  function resetPassword() {
-   
-    alert("Password reset request sent!");
-  }
-</script>
+      <div class="form-group">
+        <label for="newPhoneNumber">New Phone Number:</label>
+        <input type="tel" name="phoneNumber" class="form-control" id="newPhoneNumber"
+          placeholder="Enter new phone number">
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="Update Information" onclick="validateForm()">
+      <a href="/ResetPassword/{{details.UserID}}"><button type="button" class="btn btn-danger">Reset
+          Password</button></a>
+    </form>
+  </div>
+  <div id="error" class="alert alert-danger alert fade show my-3 container account-info-container" role="alert"
+    style="display: none;">
+    <strong>Alert:</strong> Invalid Values
+  </div>
+  {{#if msg}}
+  <div class="alert alert-warning alert-dismissible fade show my-3 container account-info-container" role="alert">
+    <strong>Alert:</strong> {{msg}}
+    <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {{/if}}
+
 
 </body>
+
 </html>

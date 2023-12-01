@@ -5,5 +5,6 @@ async function test(){
     console.log(await bs.calculateTotalSalesPerStation())
     
 }
+// helloi
 
 test()

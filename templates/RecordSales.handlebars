@@ -25,6 +25,20 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   </style>
+
+  <script>
+    function validateSubmit() {
+      let sup = parseInt(document.getElementById("superFuel").value)
+      let pre = parseInt(document.getElementById("premiumFuel").value)
+      if (sup < 0 || pre < 0) {
+        document.getElementById('error').style.display = 'block'
+        return false
+      } else {
+        document.getElementById('error').style.display = 'none'
+        return true
+      }
+    }
+  </script>
 </head>
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show d-flex align-items-center">
@@ -40,7 +54,7 @@
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item">
           <span class="navbar-text mr-3">
-            Manager: <strong>{{ManagerName}}</strong> | Station ID: <strong>{{StationID}}</strong>
+            Manager: <strong>{{manager.Name}}</strong> | Station ID: <strong>{{station.StationID}}</strong>
           </span>
         </li>
       </ul>
@@ -55,7 +69,7 @@
                 <strong>Record Sales</strong>
               </div>
               <div class="card-body">
-                <form method="post">
+                <form method="post" onsubmit="return validateSubmit()">
                   <div class="form-group">
                     <label for="datepicker">Select Date:</label>
                     <div class="input-group">
@@ -64,15 +78,21 @@
                   </div>
                   <div class="form-group">
                     <label for="premiumFuel">Premium Fuel Quantity:</label>
-                    <input type="text" class="form-control" name="premiumFuel" placeholder="Enter quantity" required>
+                    <input type="number" class="form-control" name="premiumFuel" id="premiumFuel"
+                      placeholder="Enter quantity" required>
                   </div>
                   <div class="form-group">
                     <label for="superFuel">Super Fuel Quantity:</label>
-                    <input type="text" class="form-control" name="superFuel" placeholder="Enter quantity" required>
+                    <input type="number" class="form-control" name="superFuel" id="superFuel"
+                      placeholder="Enter quantity" required>
                   </div>
-                  <button type="submit" class="btn btn-primary">Record Sales</button>
+                  <input type="hidden" name="managerID" value="{{manager.UserID}}">
+                  <input type="submit" class="btn btn-primary" value="Record Sales" onclick="validateSubmit()">
                 </form>
               </div>
+            </div>
+            <div id="error" class="alert alert-danger alert fade show my-3" role="alert" style="display: none;">
+              <strong>Alert:</strong> Invalid Values
             </div>
           </div>
         </div>
