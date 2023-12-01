@@ -277,6 +277,10 @@ app.get("/ContactUs", async (req,res)=>{
     res.render("ContactUs")
 })
 
+app.use((req,res)=>{
+    res.status(404).render('notFound');
+})
+
 
 
 app.listen(8000, () => {console.log("App running at port 8000")})
