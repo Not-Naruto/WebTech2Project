@@ -235,9 +235,12 @@ app.get("/AccountInfo", async (req,res)=>{
         res.redirect('/');
         return;
     }
-    user=sd.username
-    userDetails = await business.getUser(user)
-    res.render('AccountInfo',{details: userDetails})
+    user=sd.userID
+    userDetails = await business.getUserById(user)
+    res.render('AccountInfo',{
+        details: userDetails,
+        msg : req.query.msg
+    })
 })
 
 app.post("/AccountInfo", async (req,res)=>{
@@ -258,7 +261,7 @@ app.post("/AccountInfo", async (req,res)=>{
     }
     console.log(user)
     await business.updateUser(parseInt(id),user)
-    res.redirect('/AccountInfo')
+    res.redirect('/AccountInfo?msg=Info Updated')
 })
 app.get("/ResetPassword/:id", async (req,res)=>{
     res.render("ResetPassword")
@@ -268,7 +271,7 @@ app.post("/ResetPassword/:id", async (req,res)=>{
     user = await business.getUserById(parseInt(id))
     user.Password = req.body.Password
     await business.updateUser(id,user)
-    res.redirect("/AccountInfo")
+    res.redirect("/AccountInfo?msg=Password reset")
 })
 app.get("/ContactUs", async (req,res)=>{
     res.render("ContactUs")

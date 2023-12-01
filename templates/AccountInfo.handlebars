@@ -25,15 +25,19 @@
     }
     function isValidPhoneNumber() {
       var phoneNumberInput = document.getElementById('newPhoneNumber');
+      let error = document.getElementById('error')
       if (phoneNumberInput.value != "") {
         var phoneNumber = parseInt(phoneNumberInput.value, 10);
         if (!isNaN(phoneNumber) && phoneNumber >= 30000000 && phoneNumber <= 80000000) {
+          error.style.display = 'none';
           return true;
         } else {
+          error.style.display = 'block';
           return false;
         }
       } else {
         return true
+        error.style.display = 'none';
       }
 
     }
@@ -99,9 +103,21 @@
       </div>
 
       <input type="submit" class="btn btn-primary" value="Update Information" onclick="validateForm()">
-      <a href="/ResetPassword/{{details.UserID}}"><button type="button" class="btn btn-danger">Reset Password</button></a>
+      <a href="/ResetPassword/{{details.UserID}}"><button type="button" class="btn btn-danger">Reset
+          Password</button></a>
     </form>
   </div>
+  <div id="error" class="alert alert-danger alert fade show my-3 container account-info-container" role="alert"
+    style="display: none;">
+    <strong>Alert:</strong> Invalid Values
+  </div>
+  {{#if msg}}
+  <div class="alert alert-warning alert-dismissible fade show my-3 container account-info-container" role="alert">
+    <strong>Alert:</strong> {{msg}}
+    <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {{/if}}
+
 
 </body>
 
