@@ -128,6 +128,13 @@ async function updateAddSales(date, stationID, data){
     }
 }
 
+async function findAllSales(){
+    await connectDatabase();
+    let rawData = await sales.find({})
+    let result = await rawData.toArray();
+    return result;
+}
+
 module.exports = {
     getAllUsers,
     getAllStations,
@@ -140,5 +147,6 @@ module.exports = {
     getSession,
     deleteSession,
     findSales,
-    updateAddSales
+    updateAddSales,
+    findAllSales
 }
