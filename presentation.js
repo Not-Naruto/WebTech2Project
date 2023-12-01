@@ -317,9 +317,13 @@ app.get("/ContactUs", async (req,res)=>{
 
 app.use((req,res)=>{
     res.status(404).render('notFound');
-    res.status(500).render('Error')
+
 })
 
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).render('Error');
+  });
 
 
 app.listen(8000, () => {console.log("App running at port 8000")})
