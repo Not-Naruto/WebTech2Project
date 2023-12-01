@@ -185,12 +185,12 @@ app.get('/Stations', async (req,res)=>{
 app.get('/Stations/:stationID', async (req,res)=>{
     let key = req.cookies.session;
     if(!key){
-        res.redirect('/')
+        res.redirect('/Stations/?msg=Insufficient permission')
         return;
     }
     let sd = await business.getSession(key)
     if(!sd){
-        res.redirect('/');
+        res.redirect('/Stations/?msg=Insufficient permission');
         return;
     }
 
