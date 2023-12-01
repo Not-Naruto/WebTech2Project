@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Information</title>
+  
+  <style>
+    .account-info-container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-top: 50px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container account-info-container">
+  <h2>Account Information</h2>
+
+
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <p id="username">{{name}}</p>
+  </div>
+
+  <div class="form-group">
+    <label for="accountType">Account Type:</label>
+    <p id="accountType">{{userType}}</p>
+  </div>
+
+  <div class="form-group">
+    <label for="phoneNumber">Phone Number:</label>
+    <p id="phoneNumber">{{phoneNumber}}</p>
+  </div>
+
+  
+  <form id="updateForm">
+    <div class="form-group">
+      <label for="newUsername">New Username:</label>
+      <input type="text" class="form-control" id="newUsername" placeholder="Enter new username">
+    </div>
+
+    <div class="form-group">
+      <label for="newPhoneNumber">New Phone Number:</label>
+      <input type="tel" class="form-control" id="newPhoneNumber" placeholder="Enter new phone number">
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="updateInfo()">Update Information</button>
+    <button type="button" class="btn btn-danger" onclick="resetPassword()">Reset Password</button>
+  </form>
+</div>
+
+
+<script>
+  function updateInfo() {
+   
+    alert("User information updated!");
+  }
+
+  function resetPassword() {
+   
+    alert("Password reset request sent!");
+  }
+</script>
+
+</body>
+</html>

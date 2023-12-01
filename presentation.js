@@ -189,6 +189,21 @@ app.get("/logout", async (req,res)=>{
     res.redirect('/?message=Logged out Succesfully');
 })
 
+app.get("/AccountInfo", async (req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/');
+        return;
+    }
+    user=sd.username
+    res.render('AccountInfo')
+})
+
 
 
 
