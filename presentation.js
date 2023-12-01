@@ -74,8 +74,8 @@ app.get("/Manager/:ManagerName", async (req, res)=>{
     }
     else{
         manageStation=true;
-        fuelTypeSuper = stationData.Fuel[1].price
-        fuelTypePremium = stationData.Fuel[0].price
+        fuelTypeSuper = stationData.Fuel[1]
+        fuelTypePremium = stationData.Fuel[0]
     }
     res.render('ManagerPage',{
         msg:req.query.msg,
@@ -101,8 +101,9 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
     }
     else{
         manageStation=true;
-        fuelTypeSuper = stationData.Fuel[1].price
-        fuelTypePremium = stationData.Fuel[0].price
+        fuelTypeSuper = stationData.Fuel[1]
+        fuelTypePremium = stationData.Fuel[0]
+        
     }
 
     res.render('ManagerPage',{
@@ -176,6 +177,11 @@ app.post('/:ManagerName/:stationID/delivery', async(req,res)=>{
     res.redirect(`/Manager/${req.params.ManagerName}?msg=Fuel Delivery recorded`)
 })
 
+
+//making admin homePage
+app.get('/admin/:adminName', (req, res)=>{
+    res.render('adminPage')
+})
 
 app.get("/logout", async (req,res)=>{
     await business.deleteSession(req.cookies.session)

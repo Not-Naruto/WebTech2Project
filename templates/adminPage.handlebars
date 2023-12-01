@@ -1,0 +1,92 @@
+<!-- adminPage.hbs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <!-- Include Bootstrap CSS link here -->
+    <!-- Include Chart.js library if you're using charts -->
+    <style>
+        /* Add any custom styles here */
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Welcome, {{adminName}}!</h1>
+
+    <!-- Example Graphs (using Chart.js and Bootstrap) -->
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="fuelSalesChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="fuelRemainingChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- View all Stations Link -->
+    <a href="/stations" class="btn btn-primary mt-3">View all Stations</a>
+
+    <!-- Add Station Button -->
+    <button class="btn btn-success mt-3" data-toggle="modal" data-target="#addStationModal">Add Station</button>
+
+    <!-- Add Station Modal (Bootstrap modal for adding a station) -->
+    <div class="modal fade" id="addStationModal" tabindex="-1" role="dialog" aria-labelledby="addStationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStationModalLabel">Add Station</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add your station form here -->
+                    <!-- Example: -->
+                    <form action="/addStation" method="post">
+                        <!-- Station details input fields -->
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and Chart.js scripts here -->
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Add your Chart.js code for fuelSalesChart and fuelRemainingChart here
+        // Example:
+        var ctx = document.getElementById('fuelSalesChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                // Your chart data here
+            },
+            options: {
+                // Your chart options here
+            }
+        });
+
+        var ctx2 = document.getElementById('fuelRemainingChart').getContext('2d');
+        var myChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                // Your chart data here
+            },
+            options: {
+                // Your chart options here
+            }
+        });
+    </script>
+</div>
+
+</body>
+</html>
