@@ -54,18 +54,19 @@ app.get("/HomePage", async(req,res)=>{
         return;
     }
     if(sd.type== "Manager"){
-        res.redirect(`/Manager/${sd.username}`)
+        res.redirect(`/Manager/${sd.userID}`)
     }else if (sd.type== "Admin"){
-        res.redirect(`/Admin/${sd.username}`)
+        res.redirect(`/Admin/${sd.userID}`)
     }else{
         res.redirect("/Guest")
     }
 })
 
 
-app.get("/Manager/:ManagerName", async (req, res)=>{
-    let ManagerName = req.params.ManagerName
-    let stationData = await business.findStationByManagerName(ManagerName)
+app.get("/Manager/:id", async (req, res)=>{
+    let id = parseInt(req.params.id)
+    let stationData = await business.findStationByManagerId(id)
+    let manager = await business.getUserById(id)
     let fuelTypePremium = undefined
     let fuelTypeSuper = undefined
     
@@ -80,19 +81,20 @@ app.get("/Manager/:ManagerName", async (req, res)=>{
     res.render('ManagerPage',{
         msg:req.query.msg,
         station: stationData,
-        ManagerName: ManagerName,
+        ManagerName: manager.Name,
         isManaging:manageStation,
         premium: fuelTypePremium,
         super: fuelTypeSuper,
     })
 })
 
-app.post("/Manager/:ManagerName", async (req, res)=>{
-    let ManagerName = req.params.ManagerName
+app.post("/Manager/:id", async (req, res)=>{
+    let id = parseInt(req.params.id)
     let viewSales = req.body.salesDate
     console.log(viewSales)
-    let stationData = await business.findStationByManagerName(ManagerName)
-    let sales = await business.findSales(viewSales, ManagerName)
+    let manager = await business.getUserById(id)
+    let stationData = await business.findStationByManagerId(id)
+    let sales = await business.findSales(viewSales, id)
     let fuelTypePremium = undefined
     let fuelTypeSuper = undefined
     
@@ -108,7 +110,7 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
 
     res.render('ManagerPage',{
         station: stationData,
-        ManagerName: ManagerName,
+        ManagerName: manager.Name,
         isManaging:manageStation,
         premium: fuelTypePremium,
         super: fuelTypeSuper,
@@ -116,20 +118,35 @@ app.post("/Manager/:ManagerName", async (req, res)=>{
     })
 })
 
-app.get('/:ManagerName/:stationName/recordSales', async (req, res)=>{
-    let managerName = req.params.ManagerName
-    let stationData = await business.findStationByManagerName(managerName)
-    res.render('RecordSales',{
-        ManagerName: managerName,
-        StationID: stationData.StationID
-    })
+app.get('/:stationID/recordSales', async (req, res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/');
+        return;
+    }
+    
+    let station = await business.getStation(parseInt(req.params.stationID));
+    if (sd.userID == station.ManagerID){
+        manager = await business.getUserById(sd.userID);
+        res.render("RecordSales", {
+            manager: manager,
+            station: station
+        })
+    }else{
+        res.redirect(`/Manager/${sd.userID}?msg=Lacking permissions to access screen`)
+    }
 })
 
-app.post('/:ManagerName/:stationName/recordSales', async (req, res)=>{
+app.post('/:stationID/recordSales', async (req, res)=>{
     let date = req.body.datepicker
     let premiumFuel = parseInt(req.body.premiumFuel)
     let superFuel = parseInt(req.body.superFuel)
-    let stationData = await business.findStationByManagerName(req.params.ManagerName) 
+    let stationData = await business.getStation(parseInt(req.params.stationID)) 
     let data = [
         {
             type:"Super",
@@ -143,8 +160,13 @@ app.post('/:ManagerName/:stationName/recordSales', async (req, res)=>{
         }
     ]
 
-    let updateAdd = await business.updateAddSales(date, req.params.ManagerName, data)
-    res.redirect(`/Manager/${req.params.ManagerName}?msg=Sales has been added/Updated`)
+    if(stationData.Fuel[0].remaining<premiumFuel || stationData.Fuel[1].remaining<superFuel){
+        res.redirect(`/Manager/${req.body.managerID}?msg=Insufficient Fuel`)
+        return;
+    }
+
+    await business.updateAddSales(date, parseInt(req.params.stationID), data)
+    res.redirect(`/Manager/${req.body.managerID}?msg=Sales has been added/Updated`)
 })
 
 
@@ -159,22 +181,35 @@ app.get('/Stations', async (req,res)=>{
     })
 })
 
-app.get('/:ManagerName/:stationID/delivery', async (req, res)=>{
+app.get('/:stationID/delivery', async (req, res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/');
+        return;
+    }
+    
     let station = await business.getStation(parseInt(req.params.stationID));
-    if (req.params.ManagerName == station.Manager){
+    if (sd.userID == station.ManagerID){
+        manager = await business.getUserById(sd.userID);
         res.render("Delivery", {
+            manager: manager,
             station: station
         })
     }else{
-        res.redirect(`/Manager/${req.params.ManagerName}?msg=Lacking permissions to access screen`)
+        res.redirect(`/Manager/${sd.userID}?msg=Lacking permissions to access screen`)
     }
 })
 
-app.post('/:ManagerName/:stationID/delivery', async(req,res)=>{
+app.post('/:stationID/delivery', async(req,res)=>{
     let superFuel = parseInt(req.body.superFuel);
     let premiumFuel = parseInt(req.body.premiumFuel);
     await business.addFuel(req.params.stationID, superFuel, premiumFuel)
-    res.redirect(`/Manager/${req.params.ManagerName}?msg=Fuel Delivery recorded`)
+    res.redirect(`/Manager/${req.body.managerId}?msg=Fuel Delivery recorded`)
 })
 
 
@@ -223,6 +258,7 @@ app.post("/AccountInfo", async (req,res)=>{
     }
     console.log(user)
     await business.updateUser(parseInt(id),user)
+    res.redirect('/AccountInfo')
 })
 app.get("/ResetPassword/:id", async (req,res)=>{
     res.render("ResetPassword")

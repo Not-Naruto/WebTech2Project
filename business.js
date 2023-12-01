@@ -8,7 +8,7 @@ async function attemptLogin(user,pass){
         return undefined
     }
     let data = {
-        username: details.Name,
+        userID: details.UserID,
         type: details.UserType
     }
 
@@ -93,10 +93,10 @@ async function getFlash(key){
     }
 }
 
-async function findStationByManagerName(ManagerName){
+async function findStationByManagerId(id){
     let allStation = await persistance.getAllStations()
     for(let i=0; i<allStation.length; i++){
-        if(ManagerName == allStation[i].Manager){
+        if(id == allStation[i].ManagerID){
             return allStation[i]
         }
     }
@@ -104,9 +104,9 @@ async function findStationByManagerName(ManagerName){
 }
 
 
-async function findSales(date, ManagerName) {
+async function findSales(date, id) {
     
-        let stationData = await findStationByManagerName(ManagerName)
+        let stationData = await findStationByManagerId(id)
         console.log(stationData)
         let salesData = await persistance.findSales(date, stationData.StationID);
 
@@ -133,11 +133,12 @@ async function findSales(date, ManagerName) {
         };
 }
 
-async function updateAddSales(date, ManagerName, data){
-    let stationData = await findStationByManagerName(ManagerName)
-    let updateAdd = await persistance.updateAddSales(date, stationData.StationID, data)
-    return updateAdd
-    
+async function updateAddSales(date, id, data){
+    let stationData = await getStation(id)
+    await persistance.updateAddSales(date, stationData.StationID, data)
+    stationData.Fuel[0].remaining-=data[1].quantity;
+    stationData.Fuel[1].remaining-=data[0].quantity;
+    await persistance.updateStation(id, stationData);
 }
 
 async function addFuel(stationID, sup, pre){
@@ -171,7 +172,7 @@ module.exports = {
     setFlash,
     getFlash,
     attemptLogin,
-    findStationByManagerName,
+    findStationByManagerId,
     findSales,
     updateAddSales,
     addFuel

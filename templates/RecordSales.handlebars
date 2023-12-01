@@ -40,7 +40,7 @@
       <ul class="nav navbar-nav ml-auto">
         <li class="nav-item">
           <span class="navbar-text mr-3">
-            Manager: <strong>{{ManagerName}}</strong> | Station ID: <strong>{{StationID}}</strong>
+            Manager: <strong>{{manager.Name}}</strong> | Station ID: <strong>{{station.StationID}}</strong>
           </span>
         </li>
       </ul>
@@ -70,6 +70,7 @@
                     <label for="superFuel">Super Fuel Quantity:</label>
                     <input type="text" class="form-control" name="superFuel" placeholder="Enter quantity" required>
                   </div>
+                  <input type="hidden" name="managerID" value="{{manager.UserID}}">
                   <button type="submit" class="btn btn-primary">Record Sales</button>
                 </form>
               </div>
