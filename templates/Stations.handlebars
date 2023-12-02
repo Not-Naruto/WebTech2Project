@@ -13,12 +13,18 @@
     <div class="text-secondary border-2 my-3">
         <hr>
     </div>
+    {{#if msg}}
+    <div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
+        <strong>Alert:</strong> {{msg}}
+        <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {{/if}}
     <div class="row row-cols-1 row-cols-lg-4 row-cols-md-2 g-4">
         {{#each stationList}}
 
         <div class="col">
-            <a href="#" class="card h-100 rounded-4 shadow bg-body-tertiary text-decoration-none"
-                style="overflow: hidden;">
+            <a href="/Stations/{{this.StationID}}"
+                class="card h-100 rounded-4 shadow bg-body-tertiary text-decoration-none" style="overflow: hidden;">
 
                 {{#if this.isWoqod}}
                 <div class="d-flex"

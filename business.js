@@ -153,8 +153,19 @@ async function findAllSales() {
     return uniqueStationsWithSales;
 }
 
+async function findSalesforStation(id){
+    let mapping = {0:"Jan", 1:"Feb", 2:"Mar", 3:'Apr', 4:'May', 5:'Jun', 6:"Jul", 7:'Aug', 8:"Sep", 9:'Oct', 10:'Nov', 11:"Dec"}
+    let superOutput = {'Jan':0,'Feb':0,"Mar":0,"Apr":0,"May":0,"Jun":0,"Jul":0,"Aug":0,"Sep":0,'Oct':0,"Nov":0,"Dec":0};
+    let premiumOutput = {'Jan':0,'Feb':0,"Mar":0,"Apr":0,"May":0,"Jun":0,"Jul":0,"Aug":0,"Sep":0,'Oct':0,"Nov":0,"Dec":0};
+    let rawsales = await persistance.findAllSales();
+    rawsales = rawsales.filter(item=>item.StationID==id)
 
-
+    for(let i = 0; i<rawsales.length;i++){
+        superOutput[mapping[rawsales[i].Date.getMonth()]]+=rawsales[i].Data[0].quantity * rawsales[i].Data[0].unitPrice
+        premiumOutput[mapping[rawsales[i].Date.getMonth()]]+=rawsales[i].Data[1].quantity * rawsales[i].Data[1].unitPrice
+    }
+    return {super: superOutput, premium: premiumOutput}
+}
 
 async function updateAddSales(date, id, data){
     let stationData = await getStation(id)
@@ -166,22 +177,15 @@ async function updateAddSales(date, id, data){
 
 async function calculateTotalSalesPerStation() {
     try {
-        // Get all sales data
-        const allSales = await persistance.findAllSales();
 
-        // Initialize an object to store total sales per station
+        const allSales = await persistance.findAllSales();
         const totalSalesPerStation = {};
 
-        // Iterate through each sale
         allSales.forEach(sale => {
             const stationID = sale.StationID;
-
-            // If stationID doesn't exist in the totalSalesPerStation object, initialize it
             if (!totalSalesPerStation[stationID]) {
                 totalSalesPerStation[stationID] = 0;
             }
-
-            // Calculate the total sales for the current sale and add it to the totalSalesPerStation
             const totalSalesForSale = sale.Data.reduce((total, item) => total + item.quantity * item.unitPrice, 0);
             totalSalesPerStation[stationID] += totalSalesForSale;
         });
@@ -193,6 +197,9 @@ async function calculateTotalSalesPerStation() {
     }
 }
 
+async function deleteStation(id){
+    await persistance.deleteStation(id);
+}
 
 async function addFuel(stationID, sup, pre){
     let station = await persistance.getStation(parseInt(stationID));
@@ -200,11 +207,23 @@ async function addFuel(stationID, sup, pre){
     station.Fuel[1].remaining += sup;
     await persistance.updateStation(stationID, station)
 }
+
 async function updateUser(id, data){
     await persistance.updateUser(id, data)
 }
+
 async function getUserById(id){
     return await persistance.getUserById(id)
+}
+
+async function updateStation(id, data){
+    await persistance.updateStation(id, data);
+}
+
+async function getManagers(){
+    let users = await getAllUsers();
+    let managers = users.filter((item)=>item.UserType=='Manager');
+    return managers;
 }
 
 
@@ -259,8 +278,11 @@ module.exports = {
     findAllSales,
     calculateTotalSalesPerStation,
     getRemainingSuperFuel,
-    getRemainingPremuemFuel
-
+    getRemainingPremuemFuel,
+    findSalesforStation,
+    deleteStation,
+    updateStation,
+    getManagers
 }
 
 

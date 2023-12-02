@@ -17,6 +17,10 @@ Handlebars.registerHelper('ifLow', function(arg1, options){
     return arg1<50? options.fn(this):options.inverse(this);
 })
 
+Handlebars.registerHelper('isWoqod', function(arg1, options){
+    return arg1 === 'Woqod'?options.fn(this):options.inverse(this);
+})
+
 app.set('views', __dirname+"/templates")
 app.set('view engine', 'handlebars')
 app.engine('handlebars', handlebars.engine())
@@ -26,9 +30,22 @@ app.use("/static",express.static(__dirname+'/static'));
 
 app.get("/", async (req,res)=>{
     let message = req.query.message
-    res.render('LoginPage', {
-        message: message
-    })
+    let key = req.cookies.session;
+    if(!key){
+        res.render('LoginPage', {
+            message: message
+        })
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.render('LoginPage', {
+            message: message
+        })
+        return;
+    }
+    res.redirect('/HomePage')
+    
 })
 app.post("/", async (req,res)=>{
     let username = req.body.username
@@ -177,8 +194,78 @@ app.get('/Stations', async (req,res)=>{
         return {...item, isWoqod:item.Name==="Woqod"}
     })
     res.render('Stations', {
-        stationList: stations
+        stationList: stations,
+        msg:req.query.msg
     })
+})
+
+app.get('/Stations/:stationID', async (req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/Stations/?msg=Insufficient permission')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/Stations/?msg=Insufficient permission');
+        return;
+    }
+
+    let stationID = parseInt(req.params.stationID)
+    let station = await business.getStation(stationID)
+    let admin = false;
+    if (sd.type == 'Admin'){
+        admin = true;
+    }
+    if(sd.userID == station.ManagerID || sd.type == 'Admin'){
+        let  managerName = await business.getUserById(station.ManagerID)
+        let sales = await business.findSalesforStation(stationID)
+        managerName = managerName.Name
+        res.render("StationPage",{
+            station:station,
+            admin: admin,
+            super: station.Fuel[0],
+            premium: station.Fuel[1],
+            manager: managerName,
+            message: req.query.msg,
+            superSales: Object.values(sales.super),
+            premiumSales: Object.values(sales.premium)
+        }
+        )
+    }else{
+        res.redirect("/Stations/?msg=Insufficient permission")
+    }
+})
+
+app.get('/Stations/:stationID/update', async (req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/Stations/?msg=Not Logged In')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/Stations/?msg=Not Logged In');
+        return;
+    }
+    if(sd.type != 'Admin'){
+        res.redirect('/Stations/?msg=Insufficient Permission')
+        return
+    }
+    let managers = await business.getManagers()
+    res.render("UpdateStation",{managers: managers})
+})
+
+app.post('/Stations/:stationID/update', async (req,res)=>{
+    console.log(req.body)
+    let data = await business.getStation(parseInt(req.params.stationID))
+    data.Name = req.body.StationName
+    data.Location = req.body.stationLocation
+    data.ManagerID = parseInt(req.body.stationManager)
+    data.Fuel[0].price = parseFloat(req.body.premiumFuelPrice)
+    data.Fuel[1].price = parseFloat(req.body.superFuelPrice)
+    await business.updateStation(parseInt(req.params.stationID),data)
+    res.redirect('/Stations/?msg=Station Data Updated')
 })
 
 app.get('/:stationID/delivery', async (req, res)=>{
@@ -279,9 +366,11 @@ app.post("/AccountInfo", async (req,res)=>{
     await business.updateUser(parseInt(id),user)
     res.redirect('/AccountInfo?msg=Info Updated')
 })
+
 app.get("/ResetPassword/:id", async (req,res)=>{
     res.render("ResetPassword")
 })
+
 app.post("/ResetPassword/:id", async (req,res)=>{
     id= parseInt(req.params.id)
     user = await business.getUserById(parseInt(id))
@@ -289,9 +378,40 @@ app.post("/ResetPassword/:id", async (req,res)=>{
     await business.updateUser(id,user)
     res.redirect("/AccountInfo?msg=Password reset")
 })
+
 app.get("/ContactUs", async (req,res)=>{
     res.render("ContactUs")
 })
+
+app.get("/Delete/:StationID", async(req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/Stations/?msg=Not Logged In')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/Stations/?msg=Not Logged In');
+        return;
+    }
+    if (sd.type != 'Admin'){
+        res.redirect('/Stations/?msg=Insufficient Permission')
+        return;
+    }
+
+    await business.deleteStation(parseInt(req.params.StationID));
+    res.redirect("/Stations/?msg=Station Deleted")
+})
+
+app.use((req,res)=>{
+    res.status(404).render('notFound');
+
+})
+
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).render('Error');
+  });
 
 
 

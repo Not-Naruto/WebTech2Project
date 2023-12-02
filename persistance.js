@@ -4,7 +4,6 @@ client = undefined;
 station = undefined;
 users = undefined;
 session = undefined;
-session = undefined;
 sales = undefined;
 
 async function connectDatabase(){
@@ -142,6 +141,11 @@ async function findAllSales(){
     return result;
 }
 
+async function deleteStation(id){
+    await connectDatabase();
+    await station.deleteOne({StationID: id});
+}
+
 module.exports = {
     getUserById,
     getAllUsers,
@@ -156,5 +160,6 @@ module.exports = {
     deleteSession,
     findSales,
     updateAddSales,
-    findAllSales
+    findAllSales,
+    deleteStation
 }

@@ -12,14 +12,18 @@
       if ((usernameInput && usernameInput.value.trim() !== '') || (phoneNumberInput && phoneNumberInput.value.trim() !== '')) {
         if (phoneNumberInput && phoneNumberInput.value.trim() !== '') {
           if (isValidPhoneNumber(phoneNumberInput.value.trim())) {
+            error.style.display = 'none';
             return true;
           } else {
+            error.style.display = 'block';
             return false;
           }
         } else {
+          error.style.display = 'none';
           return true;
         }
       } else {
+        error.style.display = 'block';
         return false;
       }
     }

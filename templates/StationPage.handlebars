@@ -1,0 +1,238 @@
+<html>
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@4.3.0/dist/css/coreui.min.css" rel="stylesheet"
+        integrity="sha384-2E9/b2fZ+VJoP6eRIpzzMFkuqbh0qDkIFVLzJJwkESsdKPEwzb0n6E55enZ+Ee8V" crossorigin="anonymous">
+
+    <style>
+        .container {
+            display: flex;
+
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .overlaySuper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(182, 182, 0, 0.6);
+        }
+
+        .overlayPremium {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(82, 182, 0, 0.6);
+        }
+
+        .super-text {
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+
+            margin: 0;
+
+        }
+
+        .badge {
+            margin-top: 10px;
+        }
+
+        .main {
+            margin: 0 auto;
+            width: 50%;
+            min-width: 500px;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #000;
+        }
+
+        .separator:not(:empty)::before {
+            margin-right: .25em;
+        }
+
+        .separator:not(:empty)::after {
+            margin-left: .25em;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Premium',
+                        data: [{{ premiumSales }}]
+                },{
+                label: 'Super',
+                data: [{{ superSales }}]
+                            }]
+                        }
+                        });
+                    });
+    </script>
+
+</head>
+
+<body class="mx-5">
+    <div class="main">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="mx-2 d-flex  flex-row">
+                <div class="card shadow" style="max-width: 400px;">
+                    <div class="image-container" style="width: 100%; height: 200px;">
+                        <img src="https://media.istockphoto.com/id/1407850410/photo/gas-station-work.webp?b=1&s=170667a&w=0&k=20&c=5K0XYxzGXt0CWK7San8jCdrJrUgZLrwyEk1eYFn4r_A="
+                            style="height: 100%; width: 100%;">
+                        <div class="overlaySuper" style="display: flex; align-items: center; justify-content: center;">
+                            <p class="super-text">SUPER</p>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Fuel Information</h5>
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <p class="mb-1">Fuel Type: Super</p>
+                                <p class="mb-0">Remaining: {{premium.remaining}} L</p>
+                                {{#ifLow premium.remaining}}
+                                <div class="badge bg-danger">Low</div>
+                                {{else}}
+                                <div class="badge bg-success">Sufficient</div>
+                                {{/ifLow}}
+                            </div>
+                            <div class="col-4">
+                                <p class="mb-1">Fuel Price:</p>
+                                <p>${{premium.price}}/L</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mx-2 d-flex">
+                <div class="card shadow" style="max-width: 400px;">
+                    <div class="image-container" style="width: 100%; height: 200px;">
+                        <img src="https://media.istockphoto.com/id/1407850410/photo/gas-station-work.webp?b=1&s=170667a&w=0&k=20&c=5K0XYxzGXt0CWK7San8jCdrJrUgZLrwyEk1eYFn4r_A="
+                            style="height: 100%; width: 100%;">
+                        <div class="overlayPremium"
+                            style="display: flex; align-items: center; justify-content: center;">
+                            <p class="super-text">PREMIUM</p>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Fuel Information</h5>
+                        <div class="row mb-4">
+                            <div class="col-8">
+                                <p class="mb-1">Fuel Type: Premium</p>
+                                <p class="mb-0">Remaining: {{super.remaining}} L</p>
+
+                                {{#ifLow super.remaining}}
+                                <div class="badge bg-danger">Low</div>
+                                {{else}}
+                                <div class="badge bg-success">Sufficient</div>
+                                {{/ifLow}}
+                            </div>
+                            <div class="col-4">
+                                <p class="mb-1">Fuel Price:</p>
+                                <p>${{super.price}}/L</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {{#if message}}
+        <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+            <strong>Alert:</strong> {{message}}
+            <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h1 class="card-title">Station Information</h1>
+
+                {{#isWoqod station.Name}}
+                <img src="/static/img/woqod_logo.png" class="my-3" alt="logo" style="height: 50px;">
+                {{else}}
+                <img src="/static/img/Mobil1_logo.png" class="my-3" alt="logo" style="height: 50px;">
+                {{/isWoqod}}
+                <p class="card-text"><strong>Station Name:</strong> {{station.Name}}</p>
+                <p class="card-text"><strong>Station Location:</strong> {{station.Location}}</p>
+                <p class="card-text"><strong>Station Manager:</strong> {{manager}}</p>
+
+
+                <h2 class="text-center" style="margin-top: 30px;">Sales</h2>
+                <canvas id="myChart" style="margin-bottom: 30px;"></canvas>
+
+
+                {{#if admin}}
+                <div class="separator">Admin Controls</div>
+
+                <div style="text-align: center;" class="my-2">
+                    <a href="/Stations/{{station.StationID}}/update"><button type="button"
+                            class="btn btn-primary">Update Station</button></a>
+
+                    <button type="button" class="btn btn-danger" data-coreui-toggle="modal"
+                        data-coreui-target="#staticBackdrop">
+                        Delete Station
+                    </button>
+                </div>
+
+                <div class="modal fade" id="staticBackdrop" data-coreui-backdrop="static" data-coreui-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-coreui-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to Delete station {{station.StationID}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-coreui-dismiss="modal">Cancel</button>
+                                <a href="/Delete/{{station.StationID}}">
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
