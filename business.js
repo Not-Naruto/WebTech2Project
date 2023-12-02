@@ -220,6 +220,12 @@ async function updateStation(id, data){
     await persistance.updateStation(id, data);
 }
 
+async function getManagers(){
+    let users = getAllUsers();
+    let managers = users.map(item=>item.UserType=='Manager');
+    return managers;
+}
+
 
 
 module.exports = {
@@ -246,7 +252,8 @@ module.exports = {
     calculateTotalSalesPerStation,
     findSalesforStation,
     deleteStation,
-    updateStation
+    updateStation,
+    getManagers
 }
 
 
