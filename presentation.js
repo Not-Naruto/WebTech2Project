@@ -30,9 +30,22 @@ app.use("/static",express.static(__dirname+'/static'));
 
 app.get("/", async (req,res)=>{
     let message = req.query.message
-    res.render('LoginPage', {
-        message: message
-    })
+    let key = req.cookies.session;
+    if(!key){
+        res.render('LoginPage', {
+            message: message
+        })
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.render('LoginPage', {
+            message: message
+        })
+        return;
+    }
+    res.redirect('/HomePage')
+    
 })
 app.post("/", async (req,res)=>{
     let username = req.body.username
@@ -222,6 +235,25 @@ app.get('/Stations/:stationID', async (req,res)=>{
     }else{
         res.redirect("/Stations/?msg=Insufficient permission")
     }
+})
+
+app.get('/Stations/:stationID/update', async (req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/Stations/?msg=Not Logged In')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/Stations/?msg=Not Logged In');
+        return;
+    }
+    if(sd.type != 'Admin'){
+        res.redirect('/Stations/?msg=Insufficient Permission')
+        return
+    }
+    // type code here
+
 })
 
 app.get('/:stationID/delivery', async (req, res)=>{

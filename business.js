@@ -216,6 +216,10 @@ async function getUserById(id){
     return await persistance.getUserById(id)
 }
 
+async function updateStation(id, data){
+    await persistance.updateStation(id, data);
+}
+
 
 
 module.exports = {
@@ -241,7 +245,8 @@ module.exports = {
     findAllSales,
     calculateTotalSalesPerStation,
     findSalesforStation,
-    deleteStation
+    deleteStation,
+    updateStation
 }
 
 
