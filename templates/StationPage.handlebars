@@ -148,6 +148,12 @@
             </div>
 
         </div>
+        {{#if message}}
+        <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+            <strong>Alert:</strong> {{message}}
+            <button type="button" class="btn-close" data-coreui-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
         <div class="card mt-4">
             <div class="card-body">
                 <h1 class="card-title">Station Information</h1>
@@ -197,6 +203,7 @@
 
             </div>
         </div>
+
     </div>
 
 </body>

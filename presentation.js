@@ -212,7 +212,8 @@ app.get('/Stations/:stationID', async (req,res)=>{
             admin: admin,
             super: station.Fuel[0],
             premium: station.Fuel[1],
-            manager: managerName
+            manager: managerName,
+            message: req.query.msg
         }
         )
     }else{
