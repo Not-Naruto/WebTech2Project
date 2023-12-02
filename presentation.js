@@ -252,8 +252,20 @@ app.get('/Stations/:stationID/update', async (req,res)=>{
         res.redirect('/Stations/?msg=Insufficient Permission')
         return
     }
-    // type code here
+    let managers = await business.getManagers()
+    res.render("UpdateStation",{managers: managers})
+})
 
+app.post('/Stations/:stationID/update', async (req,res)=>{
+    console.log(req.body)
+    let data = await business.getStation(parseInt(req.params.stationID))
+    data.Name = req.body.StationName
+    data.Location = req.body.stationLocation
+    data.ManagerID = parseInt(req.body.stationManager)
+    data.Fuel[0].price = parseFloat(req.body.premiumFuelPrice)
+    data.Fuel[1].price = parseFloat(req.body.superFuelPrice)
+    await business.updateStation(parseInt(req.params.stationID),data)
+    res.redirect('/Stations/?msg=Station Data Updated')
 })
 
 app.get('/:stationID/delivery', async (req, res)=>{
