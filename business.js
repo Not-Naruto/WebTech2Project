@@ -226,6 +226,19 @@ async function getManagers(){
     return managers;
 }
 
+async function getManagersWithoutStation() {
+    let users = await getAllUsers();
+    let stations = await getAllStations();
+    let managers = users.filter((item) => item.UserType === 'Manager');
+
+    let managersWithoutStation = managers.filter((manager) => {
+        return stations.every((station) => manager.UserID !== station.ManagerID);
+    });
+
+    return managersWithoutStation;
+}
+
+
 
 async function getRemainingPremuemFuel(){
     let data = await persistance.getAllStations()
@@ -252,6 +265,26 @@ async function getRemainingSuperFuel(){
 }
 
 
+async function addStation(data){
+    return await persistance.addStation(data)
+}
+
+async function generateStationID(){
+    let stations = await persistance.getAllStations();
+        
+        // Find the maximum ID in the existing stations
+        let maxID = 0;
+        for (let station of stations) {
+            if (station.StationID > maxID) {
+                maxID = station.StationID;
+            }
+        }
+
+        // Increment the maximum ID to generate a new unique ID
+        let newID = maxID + 1;
+
+        return newID;
+}
 
 
 
@@ -282,7 +315,10 @@ module.exports = {
     findSalesforStation,
     deleteStation,
     updateStation,
-    getManagers
+    getManagers,
+    getManagersWithoutStation,
+    addStation,
+    generateStationID
 }
 
 

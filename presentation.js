@@ -305,6 +305,7 @@ app.get('/admin/:adminID', async (req, res)=>{
     let adminID = req.params.adminID
     let adminName = await business.getUserById(parseInt(adminID))
     let sales = await business.findAllSales()
+    let stations = await business.getAllStations()
     let totalSales = await business.calculateTotalSalesPerStation()
     let SuperRemaining = await business.getRemainingSuperFuel()
     let PremiumRemaining = await business.getRemainingPremuemFuel()
@@ -313,12 +314,34 @@ app.get('/admin/:adminID', async (req, res)=>{
         sales:sales,
         total: totalSales,
         PremiumRemaining: PremiumRemaining,
-        SuperRemaining: SuperRemaining
+        SuperRemaining: SuperRemaining,
+        stations: stations
     })
 })
 
-app.get('/Admin//admin/:adminID/AddStation', (req, res)=>{
-    res.send("this is working.")
+app.get('/admin/:adminID/AddStation', async(req, res)=>{
+    let managers = await business.getManagersWithoutStation()
+    res.render('AddStation',{
+        managers: managers
+    })
+})
+
+app.post('/admin/:adminID/AddStation', async(req, res)=>{
+    const stationData = {
+        StationID: await business.generateStationID(),
+        Name: req.body.StationName,
+        Location: req.body.stationLocation,
+        ManagerID: req.body.stationManager,
+        Fuel: [
+            { type: 'Super', price: parseFloat(req.body.superFuelPrice), remaining: 0 },
+            { type: 'Premium', price: parseFloat(req.body.premiumFuelPrice), remaining: 0 }
+        ]
+    };
+
+    await business.addStation(stationData);
+
+    // Redirect or respond accordingly
+    res.redirect('/admin/:adminID');
 })
 
 app.get("/logout", async (req,res)=>{

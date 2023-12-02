@@ -50,7 +50,7 @@
         <a href="/stations" class="btn btn-primary mt-3">View all Stations</a>
 
         <!-- Add Station Button -->
-        <a href="/Admin//admin/:adminID/AddStation" class="btn btn-success mt-3">Add Station</a>
+        <a href="/admin/:adminID/AddStation" class="btn btn-success mt-3">Add Station</a>
     </div>
 
     <!-- Adding this part to the end of the body-->
@@ -105,7 +105,7 @@
             var myChart2 = new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: [{{#each sales}}"{{this.StationID}}",{{/each}}],
+                    labels: [{{#each stations}}"{{this.StationID}}",{{/each}}],
                     datasets: [{
                         label: 'Super Fuel',
                         data: [{{#each SuperRemaining}}"{{this}}", {{/each}}],

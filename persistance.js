@@ -72,7 +72,7 @@ async function addSales(data){
     await connectDatabase();
     await users.insertOne(data);
 }
-// need fixing
+
 async function updateSession(uuid, expiry, data){
     await connectDatabase()
     let findSession = await session.findOne({"sessionKey": uuid})
@@ -146,6 +146,11 @@ async function deleteStation(id){
     await station.deleteOne({StationID: id});
 }
 
+async function addStation(data){
+    await connectDatabase()
+    await station.insertOne(data)
+}
+
 module.exports = {
     getUserById,
     getAllUsers,
@@ -161,5 +166,6 @@ module.exports = {
     findSales,
     updateAddSales,
     findAllSales,
-    deleteStation
+    deleteStation,
+    addStation
 }
