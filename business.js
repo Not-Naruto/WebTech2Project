@@ -153,8 +153,19 @@ async function findAllSales() {
     return uniqueStationsWithSales;
 }
 
+async function findSalesforStation(id){
+    let mapping = {0:"Jan", 1:"Feb", 2:"Mar", 3:'Apr', 4:'May', 5:'Jun', 6:"Jul", 7:'Aug', 8:"Sep", 9:'Oct', 10:'Nov', 11:"Dec"}
+    let superOutput = {'Jan':0,'Feb':0,"Mar":0,"Apr":0,"May":0,"Jun":0,"Jul":0,"Aug":0,"Sep":0,'Oct':0,"Nov":0,"Dec":0};
+    let premiumOutput = {'Jan':0,'Feb':0,"Mar":0,"Apr":0,"May":0,"Jun":0,"Jul":0,"Aug":0,"Sep":0,'Oct':0,"Nov":0,"Dec":0};
+    let rawsales = await persistance.findAllSales();
+    rawsales = rawsales.filter(item=>item.StationID==id)
 
-
+    for(let i = 0; i<rawsales.length;i++){
+        superOutput[mapping[rawsales[i].Date.getMonth()]]+=rawsales[i].Data[0].quantity * rawsales[i].Data[0].unitPrice
+        premiumOutput[mapping[rawsales[i].Date.getMonth()]]+=rawsales[i].Data[1].quantity * rawsales[i].Data[1].unitPrice
+    }
+    return {super: superOutput, premium: premiumOutput}
+}
 
 async function updateAddSales(date, id, data){
     let stationData = await getStation(id)
@@ -230,8 +241,8 @@ module.exports = {
     updateAddSales,
     addFuel,
     findAllSales,
-    calculateTotalSalesPerStation
-
+    calculateTotalSalesPerStation,
+    findSalesforStation
 }
 
 

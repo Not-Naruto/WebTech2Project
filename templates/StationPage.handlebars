@@ -76,6 +76,25 @@
         }
     </style>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Premium',
+                        data: [{{ premiumSales }}]
+                },{
+                label: 'Super',
+                data: [{{ superSales }}]
+                            }]
+                        }
+                        });
+                    });
+    </script>
+
 </head>
 
 <body class="mx-5">
@@ -166,6 +185,11 @@
                 <p class="card-text"><strong>Station Name:</strong> {{station.Name}}</p>
                 <p class="card-text"><strong>Station Location:</strong> {{station.Location}}</p>
                 <p class="card-text"><strong>Station Manager:</strong> {{manager}}</p>
+
+
+                <h2 class="text-center" style="margin-top: 30px;">Sales</h2>
+                <canvas id="myChart" style="margin-bottom: 30px;"></canvas>
+
 
                 {{#if admin}}
                 <div class="separator">Admin Controls</div>

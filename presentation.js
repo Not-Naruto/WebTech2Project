@@ -206,6 +206,7 @@ app.get('/Stations/:stationID', async (req,res)=>{
     }
     if(sd.userID == station.ManagerID || sd.type == 'Admin'){
         let  managerName = await business.getUserById(station.ManagerID)
+        let sales = await business.findSalesforStation(stationID)
         managerName = managerName.Name
         res.render("StationPage",{
             station:station,
@@ -213,7 +214,9 @@ app.get('/Stations/:stationID', async (req,res)=>{
             super: station.Fuel[0],
             premium: station.Fuel[1],
             manager: managerName,
-            message: req.query.msg
+            message: req.query.msg,
+            superSales: Object.values(sales.super),
+            premiumSales: Object.values(sales.premium)
         }
         )
     }else{
