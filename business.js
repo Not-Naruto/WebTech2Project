@@ -177,22 +177,15 @@ async function updateAddSales(date, id, data){
 
 async function calculateTotalSalesPerStation() {
     try {
-        // Get all sales data
-        const allSales = await persistance.findAllSales();
 
-        // Initialize an object to store total sales per station
+        const allSales = await persistance.findAllSales();
         const totalSalesPerStation = {};
 
-        // Iterate through each sale
         allSales.forEach(sale => {
             const stationID = sale.StationID;
-
-            // If stationID doesn't exist in the totalSalesPerStation object, initialize it
             if (!totalSalesPerStation[stationID]) {
                 totalSalesPerStation[stationID] = 0;
             }
-
-            // Calculate the total sales for the current sale and add it to the totalSalesPerStation
             const totalSalesForSale = sale.Data.reduce((total, item) => total + item.quantity * item.unitPrice, 0);
             totalSalesPerStation[stationID] += totalSalesForSale;
         });
