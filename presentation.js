@@ -214,14 +214,24 @@ app.post('/:stationID/delivery', async(req,res)=>{
 
 
 //making admin homePage
-app.get('/admin/:adminName', async (req, res)=>{
+app.get('/admin/:adminID', async (req, res)=>{
+    let adminID = req.params.adminID
+    let adminName = await business.getUserById(parseInt(adminID))
     let sales = await business.findAllSales()
     let totalSales = await business.calculateTotalSalesPerStation()
+    let SuperRemaining = await business.getRemainingSuperFuel()
+    let PremiumRemaining = await business.getRemainingPremuemFuel()
     res.render('adminPage',{
-        adminName: req.params.adminName,
+        adminName: adminName.Name,
         sales:sales,
-        total: totalSales
+        total: totalSales,
+        PremiumRemaining: PremiumRemaining,
+        SuperRemaining: SuperRemaining
     })
+})
+
+app.get('/Admin//admin/:adminID/AddStation', (req, res)=>{
+    res.send("this is working.")
 })
 
 app.get("/logout", async (req,res)=>{

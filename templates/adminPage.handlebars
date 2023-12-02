@@ -5,6 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
+    <style>
+        /* Add custom styles for centering */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh; /* Adjust the height as needed */
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,20 +27,37 @@
         <h1>Welcome, {{adminName}}!</h1>
 
         <!-- Example Graphs (using Chart.js and Bootstrap) -->
-        <canvas id="myChart" style="max-width: 500px;"></canvas>
+
+        <!-- First Chart -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart-container">
+                    <canvas id="myChart" width="300" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Chart -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="chart-container">
+                    <canvas id="chart" width="300" height="150"></canvas>
+                </div>
+            </div>
+        </div>
 
         <!-- View all Stations Link -->
         <a href="/stations" class="btn btn-primary mt-3">View all Stations</a>
 
         <!-- Add Station Button -->
-        <button class="btn btn-success mt-3" data-toggle="modal" data-target="#addStationModal">Add Station</button>
+        <a href="/Admin//admin/:adminID/AddStation" class="btn btn-success mt-3">Add Station</a>
     </div>
 
     <!-- Adding this part to the end of the body-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Chart.js code
+            // Chart.js code for the first chart
             var ctx = document.getElementById("myChart").getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'bar',
@@ -34,7 +65,7 @@
                     labels: [{{#each sales}}"{{this.StationID}}",{{/each}}],
                     datasets: [{
                         label: 'Total Sales $',
-                        data: [{{#each total}}"{{this}}",{{/each}}],
+                        data: [{{#each total}}"{{this}}", {{/each}}],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -55,15 +86,64 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Total Sales'
+                        }
+                    },
                     scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
             });
+
+            // Second chart
+            var ctx2 = document.getElementById("chart").getContext('2d');
+            var myChart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [{{#each sales}}"{{this.StationID}}",{{/each}}],
+                    datasets: [{
+                        label: 'Super Fuel',
+                        data: [{{#each SuperRemaining}}"{{this}}", {{/each}}],
+                        backgroundColor: [
+                            'rgba(47, 52, 189, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(47, 52, 189, 0.8)'
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Premium Fuel',
+                        data: [{{#each PremiumRemaining}}"{{this}}", {{/each}}],
+                        backgroundColor: [
+                            'rgba(94, 194, 229, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(94, 194, 229, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Fuel Remaining'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
         });
     </script>
 </body>

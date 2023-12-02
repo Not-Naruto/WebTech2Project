@@ -208,6 +208,33 @@ async function getUserById(id){
 }
 
 
+async function getRemainingPremuemFuel(){
+    let data = await persistance.getAllStations()
+    
+    let Remaining = []
+    for(let station of data){
+        let Premium = station.Fuel[0].remaining
+        Remaining.push(Premium)
+    }
+
+    return Remaining
+}
+
+async function getRemainingSuperFuel(){
+    let stationData = await persistance.getAllStations()
+    
+    let SuperRemaining = []
+    for(let station of stationData){
+        let Super = station.Fuel[1].remaining
+        SuperRemaining.push(Super)
+    }
+
+    return SuperRemaining
+}
+
+
+
+
 
 module.exports = {
     getUserById,
@@ -230,7 +257,9 @@ module.exports = {
     updateAddSales,
     addFuel,
     findAllSales,
-    calculateTotalSalesPerStation
+    calculateTotalSalesPerStation,
+    getRemainingSuperFuel,
+    getRemainingPremuemFuel
 
 }
 
