@@ -17,6 +17,10 @@ Handlebars.registerHelper('ifLow', function(arg1, options){
     return arg1<50? options.fn(this):options.inverse(this);
 })
 
+Handlebars.registerHelper('isWoqod', function(arg1, options){
+    return arg1 === 'Woqod'?options.fn(this):options.inverse(this);
+})
+
 app.set('views', __dirname+"/templates")
 app.set('view engine', 'handlebars')
 app.engine('handlebars', handlebars.engine())
@@ -201,11 +205,14 @@ app.get('/Stations/:stationID', async (req,res)=>{
         admin = true;
     }
     if(sd.userID == station.ManagerID || sd.type == 'Admin'){
+        let  managerName = await business.getUserById(station.ManagerID)
+        managerName = managerName.Name
         res.render("StationPage",{
             station:station,
             admin: admin,
             super: station.Fuel[0],
-            premium: station.Fuel[1]
+            premium: station.Fuel[1],
+            manager: managerName
         }
         )
     }else{
