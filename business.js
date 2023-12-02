@@ -221,8 +221,8 @@ async function updateStation(id, data){
 }
 
 async function getManagers(){
-    let users = getAllUsers();
-    let managers = users.filter(item=>item.UserType=='Manager');
+    let users = await getAllUsers();
+    let managers = users.filter((item)=>item.UserType=='Manager');
     return managers;
 }
 
