@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Station Information</title>
+</head>
+<body>
+  <div class="container mt-4">
+    <h2>Update Station Information</h2>
+    <form method="post" id="updateStationForm">
+      <div class="form-group">
+        <label for="StationName">Station Name</label>
+        <select class="form-control" id="StationName" name="StationName" >
+          <option value="Mobil1">Mobil1 Station</option>
+          <option value="Woqod">Woqod Station</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="stationLocation">Location</label>
+        <input type="text" class="form-control" id="stationLocation" name="stationLocation" required>
+      </div>
+
+      <div class="form-group">
+        <label for="stationManager">Station Manager</label>
+        <select class="form-control" id="stationManager" name="stationManager" required>
+          <option value="">Please Select</option>
+          {{#each managers}}
+          <option value="{{this.UserID}}">{{this.Name}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="superFuelPrice">Super Fuel Price</label>
+        <input type="number" step="0.01" class="form-control" id="superFuelPrice" name="superFuelPrice" required>
+      </div>
+
+      <div class="form-group">
+        <label for="premiumFuelPrice">Premium Fuel Price</label>
+        <input type="number" step="0.01" class="form-control" id="premiumFuelPrice" name="premiumFuelPrice" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Update Station Information</button>
+    </form>
+  </div>
+</body>
+</html>
