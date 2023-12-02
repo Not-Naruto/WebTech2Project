@@ -197,6 +197,9 @@ async function calculateTotalSalesPerStation() {
     }
 }
 
+async function deleteStation(id){
+    await persistance.deleteStation(id);
+}
 
 async function addFuel(stationID, sup, pre){
     let station = await persistance.getStation(parseInt(stationID));
@@ -204,9 +207,11 @@ async function addFuel(stationID, sup, pre){
     station.Fuel[1].remaining += sup;
     await persistance.updateStation(stationID, station)
 }
+
 async function updateUser(id, data){
     await persistance.updateUser(id, data)
 }
+
 async function getUserById(id){
     return await persistance.getUserById(id)
 }
@@ -235,7 +240,8 @@ module.exports = {
     addFuel,
     findAllSales,
     calculateTotalSalesPerStation,
-    findSalesforStation
+    findSalesforStation,
+    deleteStation
 }
 
 

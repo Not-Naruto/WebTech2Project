@@ -312,9 +312,11 @@ app.post("/AccountInfo", async (req,res)=>{
     await business.updateUser(parseInt(id),user)
     res.redirect('/AccountInfo?msg=Info Updated')
 })
+
 app.get("/ResetPassword/:id", async (req,res)=>{
     res.render("ResetPassword")
 })
+
 app.post("/ResetPassword/:id", async (req,res)=>{
     id= parseInt(req.params.id)
     user = await business.getUserById(parseInt(id))
@@ -322,8 +324,29 @@ app.post("/ResetPassword/:id", async (req,res)=>{
     await business.updateUser(id,user)
     res.redirect("/AccountInfo?msg=Password reset")
 })
+
 app.get("/ContactUs", async (req,res)=>{
     res.render("ContactUs")
+})
+
+app.get("/Delete/:StationID", async(req,res)=>{
+    let key = req.cookies.session;
+    if(!key){
+        res.redirect('/Stations/?msg=Not Logged In')
+        return;
+    }
+    let sd = await business.getSession(key)
+    if(!sd){
+        res.redirect('/Stations/?msg=Not Logged In');
+        return;
+    }
+    if (sd.type != 'Admin'){
+        res.redirect('/Stations/?msg=Insufficient Permission')
+        return;
+    }
+
+    await business.deleteStation(parseInt(req.params.StationID));
+    res.redirect("/Stations/?msg=Station Deleted")
 })
 
 app.use((req,res)=>{
