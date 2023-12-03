@@ -29,7 +29,7 @@
 
     {{#if isManaging}}
 
-
+    <!-- Station Information -->
     <div class="card mt-4">
         <div class="card-body">
             <h5 class="card-title">Station Information</h5>
@@ -42,9 +42,13 @@
         </div>
     </div>
 
+
+    <!-- Sales Section -->
     <div class="card mt-4">
         <div class="card-body">
             <h5 class="card-title">Sales</h5>
+
+            <!-- Date Selection -->
             <div class="form-group">
                 <form method="POST">
                     <label for="selectDate">Select Date:</label>
@@ -55,6 +59,7 @@
                 </form>
             </div>
 
+            <!-- Sales Table -->
             <div class="table-responsive sales-table">
                 <table class="table table-bordered">
                     <thead>
@@ -81,6 +86,7 @@
                         {{/each}}
                         {{/if}}
 
+                        <!-- Add more rows as needed -->
                     </tbody>
                     <tfoot>
                         <tr>
@@ -93,7 +99,7 @@
         </div>
 
     </div>
-
+    <!-- Action Buttons -->
     <div class="mt-3">
         <a class="btn btn-primary mr-2" href="/{{station.StationID}}/delivery">Delivery</a>
         <a class="btn btn-success" href="/{{station.StationID}}/recordSales">Record Sales</a>
@@ -119,6 +125,11 @@
         </div>
     </div>
     {{/if}}
+
+
+
+
+    <!-- Bootstrap JS and dependencies-->
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

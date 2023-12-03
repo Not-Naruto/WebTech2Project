@@ -330,6 +330,8 @@ app.post('/:stationID/delivery', async(req,res)=>{
     res.redirect(`/Manager/${req.body.managerId}?msg=Fuel Delivery recorded`)
 })
 
+
+//making admin homePage
 app.get('/admin/:adminID', async (req, res)=>{
     let adminID = req.params.adminID
     let adminName = await business.getUserById(parseInt(adminID))
@@ -368,6 +370,8 @@ app.post('/admin/:adminID/AddStation', async(req, res)=>{
     };
 
     await business.addStation(stationData);
+
+    // Redirect or respond accordingly
     res.redirect('/admin/:adminID');
 })
 
