@@ -11,7 +11,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 70vh; /* Adjust the height as needed */
+            height: 70vh;
+            /* Adjust the height as needed */
         }
 
         canvas {
@@ -62,86 +63,87 @@
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [{{#each sales}}"{{this.StationID}}",{{/each}}],
-                    datasets: [{
-                        label: 'Total Sales $',
-                        data: [{{#each total}}"{{this}}", {{/each}}],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                        borderWidth: 1
+                    labels: [{{ #each sales }}"{{this.StationID}}",{{/ each}}],
+            datasets: [{
+                label: 'Total Sales $',
+                data: [{{ #each total }}"{{this}}", {{/ each}}],
+            backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+            borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ],
+            borderWidth: 1
                     }]
                 },
-                options: {
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Total Sales'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+            options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Total Sales'
                 }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
             });
 
-            // Second chart
-            var ctx2 = document.getElementById("chart").getContext('2d');
-            var myChart2 = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: [{{#each stations}}"{{this.StationID}}",{{/each}}],
-                    datasets: [{
-                        label: 'Super Fuel',
-                        data: [{{#each SuperRemaining}}"{{this}}", {{/each}}],
-                        backgroundColor: [
-                            'rgba(47, 52, 189, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(47, 52, 189, 0.8)'
-                        ],
-                        borderWidth: 1
+        // Second chart
+        var ctx2 = document.getElementById("chart").getContext('2d');
+        var myChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: [{{ #each stations }}"{{this.StationID}}",{{/ each}}],
+        datasets: [{
+            label: 'Super Fuel',
+            data: [{{ #each SuperRemaining }}"{{this}}", {{/ each}}],
+            backgroundColor: [
+                'rgba(47, 52, 189, 0.8)'
+            ],
+                borderColor: [
+                    'rgba(47, 52, 189, 0.8)'
+                ],
+                    borderWidth: 1
                     },
-                    {
-                        label: 'Premium Fuel',
-                        data: [{{#each PremiumRemaining}}"{{this}}", {{/each}}],
-                        backgroundColor: [
-                            'rgba(94, 194, 229, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(94, 194, 229, 0.8)'
-                        ],
-                        borderWidth: 1
-                    }]
+        {
+            label: 'Premium Fuel',
+                data: [{{ #each PremiumRemaining }} "{{this}}", {{
+                    /each}}],
+            backgroundColor: [
+                'rgba(94, 194, 229, 0.8)'
+            ],
+                borderColor: [
+                    'rgba(94, 194, 229, 0.8)'
+                ],
+                    borderWidth: 1
+        }]
                 },
-                options: {
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Fuel Remaining'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                        text: 'Fuel Remaining'
                 }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
             });
 
         });

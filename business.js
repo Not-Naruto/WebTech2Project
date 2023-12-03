@@ -138,16 +138,12 @@ async function findAllSales() {
     let rawsales = await persistance.findAllSales();
 
     for (let sales of rawsales) {
-        // Check if an object with the same StationID is already in the array
         let existingSales = uniqueStationsWithSales.find(item => item.StationID === sales.StationID);
 
         if (!existingSales) {
-            // If an object with the same StationID does not exist, add the current sales object to the array
             uniqueStationsWithSales.push(sales);
         }
     }
-
-    // Sort the array based on the StationID in ascending order
     uniqueStationsWithSales.sort((a, b) => a.StationID - b.StationID);
 
     return uniqueStationsWithSales;
@@ -272,7 +268,6 @@ async function addStation(data){
 async function generateStationID(){
     let stations = await persistance.getAllStations();
         
-        // Find the maximum ID in the existing stations
         let maxID = 0;
         for (let station of stations) {
             if (station.StationID > maxID) {
@@ -280,7 +275,6 @@ async function generateStationID(){
             }
         }
 
-        // Increment the maximum ID to generate a new unique ID
         let newID = maxID + 1;
 
         return newID;
