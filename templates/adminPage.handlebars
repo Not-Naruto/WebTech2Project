@@ -63,7 +63,7 @@
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [{{ #each sales }}"{{this.StationID}}", {{/ each}}],
+                    labels: [{{ #each sales }}"{{this.StationID}}",{{/ each}}],
             datasets: [{
                 label: 'Total Sales $',
                 data: [{{ #each total }}"{{this}}", {{/ each}}],
@@ -121,7 +121,7 @@
         {
             label: 'Premium Fuel',
                 data: [{{ #each PremiumRemaining }} "{{this}}", {{
-            /each}}],
+                    /each}}],
             backgroundColor: [
                 'rgba(94, 194, 229, 0.8)'
             ],
