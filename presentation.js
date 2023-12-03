@@ -217,6 +217,12 @@ app.get('/Stations/:stationID', async (req,res)=>{
     if (sd.type == 'Admin'){
         admin = true;
     }
+
+    if(!station){
+        res.redirect('/Stations?msg=Invalid')
+        return;
+    }
+
     if(sd.userID == station.ManagerID || sd.type == 'Admin'){
         let  managerName = await business.getUserById(station.ManagerID)
         let sales = await business.findSalesforStation(stationID)
@@ -252,13 +258,31 @@ app.get('/Stations/:stationID/update', async (req,res)=>{
         res.redirect('/Stations/?msg=Insufficient Permission')
         return
     }
-    let managers = await business.getManagers()
-    res.render("UpdateStation",{managers: managers})
+    let managers = await business.getManagersWithoutStation()
+    let station = await business.getStation(parseInt(req.params.stationID))
+
+    if(!station){
+        res.redirect('/Stations?msg=Invalid')
+        return;
+    }
+
+    res.render("UpdateStation",{
+        station: station,
+        superP:station.Fuel[1].price,
+        premiumP:station.Fuel[0].price,
+        managers: managers
+    })
 })
 
 app.post('/Stations/:stationID/update', async (req,res)=>{
     console.log(req.body)
     let data = await business.getStation(parseInt(req.params.stationID))
+
+    if(!data){
+        res.redirect('/Stations?msg=Invalid')
+        return;
+    }
+
     data.Name = req.body.StationName
     data.Location = req.body.stationLocation
     data.ManagerID = parseInt(req.body.stationManager)
@@ -281,6 +305,13 @@ app.get('/:stationID/delivery', async (req, res)=>{
     }
     
     let station = await business.getStation(parseInt(req.params.stationID));
+
+    if(!station){
+        res.redirect('/Stations?msg=Invalid')
+        return;
+    }
+
+
     if (sd.userID == station.ManagerID){
         manager = await business.getUserById(sd.userID);
         res.render("Delivery", {
@@ -331,10 +362,10 @@ app.post('/admin/:adminID/AddStation', async(req, res)=>{
         StationID: await business.generateStationID(),
         Name: req.body.StationName,
         Location: req.body.stationLocation,
-        ManagerID: req.body.stationManager,
+        ManagerID: parseInt(req.body.stationManager),
         Fuel: [
-            { type: 'Super', price: parseFloat(req.body.superFuelPrice), remaining: 0 },
-            { type: 'Premium', price: parseFloat(req.body.premiumFuelPrice), remaining: 0 }
+            { type: 'Premium', price: parseFloat(req.body.premiumFuelPrice), remaining: 0 },
+            { type: 'Super', price: parseFloat(req.body.superFuelPrice), remaining: 0 }
         ]
     };
 

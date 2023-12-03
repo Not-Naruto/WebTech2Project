@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Update Station Information</title>
 </head>
+
 <body>
   <div class="container mt-4">
     <h2>Update Station Information</h2>
     <form method="post" id="updateStationForm">
       <div class="form-group">
         <label for="StationName">Station Name</label>
-        <select class="form-control" id="StationName" name="StationName" >
+        <select class="form-control" id="StationName" name="StationName">
           <option value="Mobil1">Mobil1 Station</option>
           <option value="Woqod">Woqod Station</option>
         </select>
       </div>
       <div class="form-group">
         <label for="stationLocation">Location</label>
-        <input type="text" class="form-control" id="stationLocation" name="stationLocation" required>
+        <input type="text" class="form-control" id="stationLocation" name="stationLocation" value="{{station.Location}}"
+          required>
       </div>
 
       <div class="form-group">
@@ -33,15 +36,18 @@
 
       <div class="form-group">
         <label for="superFuelPrice">Super Fuel Price</label>
-        <input type="number" step="0.01" class="form-control" id="superFuelPrice" name="superFuelPrice" required>
+        <input type="number" step="0.01" class="form-control" id="superFuelPrice" name="superFuelPrice"
+          value="{{superP}}" required>
       </div>
 
       <div class="form-group">
         <label for="premiumFuelPrice">Premium Fuel Price</label>
-        <input type="number" step="0.01" class="form-control" id="premiumFuelPrice" name="premiumFuelPrice" required>
+        <input type="number" step="0.01" class="form-control" id="premiumFuelPrice" name="premiumFuelPrice"
+          value="{{premiumP}}" required>
       </div>
       <button type="submit" class="btn btn-primary">Update Station Information</button>
     </form>
   </div>
 </body>
+
 </html>
